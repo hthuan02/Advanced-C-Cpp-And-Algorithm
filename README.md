@@ -13,13 +13,13 @@ IDE gồm: `Dev-C++, VS Code(đã cài Extensions), Arduino IDE, KeilC, STM32Cub
 ## I. Quá trình Compiler
 Gồm 4 bước chính:
 
-- Tiền xử lý (Preprocessor).
+- Tiền xử lý (Preprocessor)
 
-- Compiler.
+- Compiler
 
-- Asembler.
+- Asembler
 
-- Linker.
+- Linker
 
 ### 1. Tiền xử lý (Preprocessor)
 (Chuyển file a.c, file b.h thành file main.i)
