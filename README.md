@@ -13,13 +13,13 @@ IDE gồm: `Dev-C++, VS Code(đã cài Extensions), Arduino IDE, KeilC, STM32Cub
 ## I. Quá trình Compiler
 Gồm 4 bước chính:
 
-- Tiền xử lý (Preprocessor)
+- Tiền xử lý (Preprocessor).
 
-- Compiler
+- Compiler.
 
-- Asembler
+- Asembler.
 
-- Linker
+- Linker.
 
 ### 1. Tiền xử lý (Preprocessor)
 (Chuyển file a.c, file b.h thành file main.i)
@@ -51,30 +51,69 @@ Gồm 4 bước chính:
 
 ## II. Marcro
 
-> Trong giai đoạn 1 tiền xử lý của quá trình Compiler thì có cacs macro hỗ trợ xử lý
->
-> Marco là từ chỉ thông tin được xử lý ở quá trình tiền xử lý (preprocessor).
+> Macro là những từ chỉ thông tin xử lý, xảy ra ở quá trình tiền xử lý `#include`, `#define`, `#ifndef`, `#if`,...
 
 ### 1. Macro chỉ thị bao hàm tệp
 
-- #include< >: Tìm kiếm trong thư mục cài đặt
+- #include< >: Tìm file trong thư mục cài đặt.
 
-- #include" ": Tìm kiếm trong thư mục hiện tại
+- #include" ": Tìm file trong thư mục hiện tại.
 
 ### 2. Macro chỉ thị định nghĩa
 
 - #define: Định nghĩa 1 đối tượng(biến, hàm, mảng)
 
-- #undef: Xóa bỏ định nghĩa #define
+_VD1: Define trên nhiều dòng_ 
 
-**Trong macro #define có 3 toán tử**
+```c
+  #define CREATE_FUNC(name_func, cmd) \
+  void name_func(){                   \
+    printf(cmd);                      \
+  }                                   \
+```
+
+- #undef: Xóa định nghĩa #define
+
+#### 3 toán tử macro #define
 
 - ##: Gộp(nhóm) các chuỗi
 
-- #: Chuyển kí tự --> chuỗi
+_VD2:_
+
+```c
+  #define merge(x,y) x##y //xy
+```
+
+- #: Chuyển kí tự -> chuỗi
+
+_VD3_
+```c
+  #define CREATE_FUNC(cmd) prinf(#cmd) // # Hỗ trợ chuẩn hóa vb thành chuỗi
+```
 
 - Variadic: Cho phép 1 hàm có thể nhận số lượng tham số truyền vào không xác định.
 
+_VD4:_
+```c
+  #define sum(...) __VA_ARGS__ 
+```
+
+```c
+  #define sum(...)                    \
+  do {                                \
+      int arr[] = {__VA_ARGS__, 0};   \
+      int tong = 0;                   \
+      int i = 0;                      \
+      while (arr[i] != 0) {           \
+          tong += arr[i];             \
+          i++;                        \
+      }                               \
+      printf("Tong = %d\n", tong);    \
+  } while (0)                         
+```
+
+- `__VA_ARGS__`: Là những giá trị đưa vào mảng.
+- `0`: Là dấu hiệu kết thúc chuỗi.
 
 ### 3. Macro chỉ thị biên dịch có điều kiện
 
