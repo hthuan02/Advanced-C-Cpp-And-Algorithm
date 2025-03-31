@@ -195,26 +195,733 @@ int main(int argc, char const *argv[])
 </details>
 
 <details>
-  <summary><h3>Bài 2: STDARG - ASSERT</h3></summary>
-
-</details>
-
-<details>
-  <summary><h3>Bài 3: Bitmask</h3></summary>
-
-</details>
-
-<details>
   <summary><h3>Bài 4: Pointer</h3></summary>
+
+> Con trỏ là 1 biến, không dùng lưu giá trị mà nó dùng để lưu địa chỉ của 1 đối tượng(biến, hàm, mảng,...)
+
+_Sự khác nhau biến & con trỏ:_
+
+  |                   | `int var = 0;`     | `int *ptr = &var;` |
+  |-------------------|-----------------------|---------------------------|
+  | **Address**       | `0x01 0x02 0x03 0x04`(Vùng địa chỉ)  | `0xc1` `0xc2` `0xc3` `0xc4` `0xc5`...`0xc8`                  |
+  | **Value**         | `0b00..00`(Số cụ thể)             | `0x01` `0x02` `0x03` `0x04` `0x00`...`0x00` (Vùng địa chỉ)                     |
+
+  - `0b00000000(MSB) 00000000 00000000 00000000(LSB)`: LSB(Địa chỉ bắt đầu-Thấp nhất) -> MSB-Cao nhất
+
+## 0. Cách sử dụng Pointer
+
+- **Khai báo con trở**
+```c
+  int *ptr_int;       // con trỏ đến kiểu int
+  char *ptr_char;     // con trỏ đến kiểu char
+  float *ptr_float;   // con trỏ đến kiểu float
+```
+
+- **Lấy địa chỉ của biến**
+```c
+  int x = 10;
+  int *ptr_x = &x;  // ptr_x chứa địa chỉ của x
+```
+- **Truy cập giá trị (giải tham chiếu - dereference)**
+```c
+  int y = *ptr_x    // y sẽ bằng giá trị của x
+  ptr_x = &x;
+  *ptr_x = *(0x01) = 10;
+```
+
+## 1. Kích thước của Con trỏ
+- Phụ thuộc vào kiến trúc của máy tinh và trình biên dịch.
+_VD:_ Laptop 64bit --> 8byte
+
+- Trên MCU phụ thuộc vào kiến thúc vi xử lý.
+_VD:_  STM32/32bit --> 4byte
+
+       STM8/8bit   --> 1byte
+
+```c
+  #include <stdio.h>
+
+  int main()
+  {
+    printf("Sizeof pointer: %d bytes\n", sizeof(int*)); // 8byte
+    printf("Sizeof pointer: %d bytes\n", sizeof(short*)); // 8
+    printf("Sizeof pointer: %d bytes\n", sizeof(float*)); // 8
+    printf("Sizeof pointer: %d bytes\n", sizeof(double*)); // 8
+    return 0;
+  }
+```
+## 2. Regular Pointer(Con trỏ với biến)
+
+> Kiểu dữ liệu(short, int, float, double,...) ảnh hưởng đến việc truy xuất giá trị, quyết định đọc bao nhiêu byte trong vùng nhớ.
+
+_VD: (Lấy ở đầu bài)_
+```c
+  int var = 10;
+  int *ptr = &var;
+```
+  - Address:  0xc1 0xc2 0xc3 0xc4 0xc5 ... 0xc8 (8byte)
+
+  - Value:    0x01 0x02 0x03 0x04 0x00 ... 0x00 (int-4byte)
+              (LSB -> MSB)
+
+  - Nếu `double` 0x01 0x02 0x03 0x04 0x05 ... 0x08  
+
+## 3. Array Pointer(Con trỏ mảng)
+
+> Vùng nhớ câp phát cho mảng phụ thuộc vào (số lượng) * (kiểu dữ liệu)
+  ```c
+  #include<stdio.h>
+    
+  int main(){
+    int arr[] = {1, 2, 3, 4, 5}; // Số lượng * sizeof(int) = 20byte
+
+    int n = (sizeof(arr)/sizeof(arr[0])); // Tính số lượng
+
+    int *ptr = arr; // mảng thì không cần dấu '&'
+
+    // ptr:    vùng địa chỉ phần tử đầu tiên 0
+    // ptr+1:  vùng địa chỉ phần tử thứ 1
+    // ptr+2:  vùng địa chỉ phần tử thứ 2
+    
+    // ptr + i.sizeof(data_type)
+    for (int i = 0; i < n; i++)
+    {
+        printf("Địa chir = %p - Giá trị: %d\n", ptr+i, *(ptr+i)); // Giải tham chiếu tìm giá trị
+    }
+
+    return 0;
+  }
+```
+
+
+## 4. Void Pointer
+> Là 1 biến, có thể trỏ đến bất kỳ địa chỉ có kiểu dữ liệu nào cũng được, nó không quan tâm các kiểu dữ liệu như (char, int, float, double,...).
+
+- Ưu điểm: Tại địa chỉ trỏ đến có thể đọc và thay đổi giá trị, với điều kiện phải ép kiểu con trỏ void.
+
+```c
+  void * ptr; //Khai bao con tro Void
+```
+- _VD1: Xuất giá trị kiểu int, char._
+
+```c
+  #include <stdio.h>
+
+  int main(int argc, char const *argv[]){
+      void *ptr;
+
+      int a = 10;
+      ptr = &a;
+      printf("Dia chi: %p, Gia tri: %d\n", ptr, *(int*)(ptr));
+
+      char c = 'C';
+      ptr = &c;
+      printf("Dia chi: %p, Gia tri: %c\n", ptr, *(char*)(ptr));
+  }
+```
+
+## 5. Function Pointer
+> Là 1 biến, có thể trỏ đến địa chỉ của 1 hàm có kiểu dữ liệu cụ thể.
+>
+>Đây là biến giữ địa chỉ của hàm, mỗi thời điểm chỉ trỏ 1 hàm.
+
+- Thông thường sử dụng theo 2 cách:
+    - Là tham số truyền vào của 1 hàm.
+    - Lưu trữ địa chỉ của 1 hàm. 
+
+```c
+   void (*func_ptr)(int, int);  // Khai bao con tro
+```
+
+- _VD2: Tổng, hiệu, tích, thương._
+
+```c
+  #include<stdio.h>
+
+  void tong(int a, int b){
+      printf("%d + %d = %d\n",a ,b, a + b); 
+  }
+  void hieu(int a, int b){
+      printf("%d - %d = %d\n",a ,b, a - b); 
+  }
+  void tich(int a, int b){
+      printf("%d * %d = %d\n",a ,b, a * b); 
+  }
+  void thuong(int a, int b){
+      printf("%d / %d = %d\n",a ,b, a / b);
+  }
+
+  int main(int argc, char *argv[]) {
+  int a = 10, b = 5;
+
+  //Khai bao mang con tro Ham
+  void (*cal[])(int, int) = {tong, hieu, tich, thuong};
+  for (int i = 0; i < 4; i++) {
+      cal[i](a, b);
+  }
+```
+
+## 6. Pointer to Constant(Con trỏ hằng)
+
+> Khi trỏ đến 1 địa chỉ, không thể thay đổi đc giá trị tại địa chỉ đó (chỉ có thể đọc và không thể thay đổi).
+>
+> Có thể trỏ đến nhiều địa chỉ khác nhau.
+
+```c
+  int const *ptr_const;
+  const int *ptr_const;
+```
+
+- _VD3:_
+```c
+  #include<stdio.h>
+
+  int a = 10;
+  int b = 3; //Khai bao ptr_const cua b duoc.
+  const int *ptr_const = &a;
+
+  int main(int argc, char const *argv[])
+  {
+    printf("%p\n", ptr_const);
+    printf("%d\n", *ptr_const); //ptr_const = 10
+
+    // *ptr_const = 5;
+    // Dong nay sai, chi co the thay doi gia tri tai a.
+    // VD: a = 15 -> *ptr_const =
+
+    a = 15;
+    printf("%p\n", ptr_const);
+    printf("%d\n", *ptr_const); //ptr_const = 15
+  }
+```
+## 7. Constant Pointer(Hằng con trỏ)
+
+> Tại địa chỉ trỏ đến không thể thay đổi được địa chỉ, còn giá trị có thể thay đổi được.
+>
+> Chỉ trỏ đến 1 địa chỉ cố đinh, khi đã trỏ đến 1 địa chỉ rồi thì không thể trỏ đến địa chỉ khác được nữa.
+
+```c
+    int *const const_ptr = &value;
+```
+
+- _VD4:_
+
+```c
+  #include<stdio.h>
+
+  int a = 10;
+  int b = 3; // Khong khai bao duoc const_ptr cua b!!!
+  int *const const_ptr = &a;
+
+  int main(int argc, char const *argv[])
+  {
+      printf("%p\n", const_ptr);
+      printf("%d\n", *const_ptr); //ptr_const = 10
+  
+      *const_ptr = 15; // hay doi gia tri tai con tro luon.
+      printf("%p\n", ptr_const);
+      printf("%d\n", *ptr_const); //ptr_const = 15
+  }
+```
+
+
+### Bảng so sánh Con Trỏ Hằng VS Hằng Con trỏ
+
+| Khác nhau | Con trỏ hằng | Hằng con trỏ |
+| :---: | --- | ---: |
+| 1 |Có thể trỏ đến nhiều địa chỉ khác | Chỉ trỏ đến 1 địa chỉ duy nhất |
+| 2 |Chỉ có thể đọc, không thể thay đổi giá trị(giá trị chỉ được thay đổi tại biến)| Có thể thay đổi giá trị |
+
+   
+## 8. NULL Pointer
+>Con trỏ trống, không trỏ đến vùng nhớ nào.
+>
+>Khai báo nhưng chưa sử dụng liền.
+
+**Lưu ý:** 
+- Khi khai báo con trỏ mà chưa sử dụng thì dùng con trỏ NULL sẽ không bị **random** giá trị vào địa chỉ rác hoặc trùng lặp địa .
+- Khởi tạo và kết thúc phải gán NULL.
+
+```c
+  int *ptr = NULL;
+```
+   
+## 9. Pointer to Pointer(Con trỏ đến con trỏ)
+>Là con trỏ mà có thể trỏ đến địa chỉ của các con trỏ khác, có nhiều cấp độ con trỏ (con trỏ cấp 2, 3,...).
+
+```c
+  int a = 10;
+  int *ptr = &a;
+  int **ptr = &ptr;
+```
+**Lưu ý:** 
+- Được sử dụng trong kiểu dữ liệu Json, cấu trúc dữ liệu list.
+- Đối với con trỏ cấp 2 là lưu địa chỉ của con trỏ cấp 1, chứ không phải lưu địa chỉ mà con trỏ đang trỏ đến.             
 
 </details>
 
 <details>
   <summary><h3>Bài 5: Storage Classes</h3></summary>
 
+## 1. Extern
+
+> Cho phép những file trong cùng 1 thư mục chia sẻ tài nguyên với nhau (biến, hàm, mảng).
+>
+> Các biến chỉ khai báo, không được khởi tạo.
+>
+> Khai báo biến cấp độ cao nhất - toàn cục.
+
+**Ưu điểm quan trọng:** Tiết kiệm được bộ nhớ.
+
+- Muốn sử dụng lại các biến đã khai báo trong file trước đó. Theo thông thường ta phải khai báo `#include"file.h"` hoặc `#define_FILE1_H`, đối với xử lý nhiều file thì việc khai báo cho file main.c sẽ tốn rất nhiều bộ nhớ.
+
+_VD1:_ Ta có 3 file
+     
+          file1.c
+
+          file2.c
+
+          main.c 
+
+➡️ Để sử dụng các biến của 1 và 2, ta khai báo `extern int a;` hoặc `extern int b;`.
+
+## 2. Static
+
+### 2.1 Satic - local variables(bss & data)
+
+> Được sử dụng, giới hạn phạm vi trong 1 hàm. 
+>
+> Giữ lại giá trị sau những lần gọi hàm, địa chỉ tổn tại trong suốt chương trình.
+>
+> Static cục bộ không thể thay đổi giá trị bên ngoài, nếu muốn thay đổi thì sử dụng con trỏ.
+
+_VD2: Static biến cục bộ_
+
+```c
+     #include<stdio.h>
+     void count(){
+          int a=5;
+          a++;
+          printf("Gia tri: %d\n",a);
+     }
+
+     int main(int argc, char const *argv[]){
+          count(); //6
+          count(); //6
+          count(); //6
+          count(); //6
+     }
+```
+- Hàm `count` dù được gọi bao nhiêu lần vẫn in ra giá trị là 6. Vì biến `a` được khai báo là 1 biến cục bộ trong hàm `count()`
+- Sau khi hàm `count` đầu tiền hoàn thành, `a` sẽ bị hủy giá trị (cấp thoát địa chỉ) và các giá trị tiếp theo vẫn = 6. 
+- Nếu ở thêm biến `static` cục bộ vào `int a=5;` là `static int a=5;` thì giá trị `a` mới có thể tăng dần lên 7, 8,... theo số lần gọi hàm `count`.
+- Có thể dùng con trỏ để thay đổi giá trị 
+```c
+     #include<stdio.h>
+
+     int *ptr = NULL;
+     void count(){
+          static int a=5;
+          ptr = &a;
+          a++;
+          printf("Gia tri: %d\n",a);
+     }
+
+     int main(int argc, char const *argv[]){
+          count(); //6
+          count(); //7
+          count(); //8
+          *ptr = 99;
+          count(); //100
+     }
+```
+
+### 2.2 Satic - global variables
+
+> Giới hạn phạm vị sử dụng trong 1 file, không thể liên kết file (các file khác không dùng Extern để gọi ra được). 
+>
+> Không thể dùng con trỏ để thay đổi giá trị.
+
+**- Ưu điểm:** Sử dụng static toàn cục để ẩn ở quá trình trung gian tính ra kết quả. Như tính delta trong phương trình bậc 2.
+
+### 2.3 Satic - class (hướng đối tượng trong C++), học sau
+
+## 3. Volatile
+
+**Biến volatile là gì?** Khai báo biến mà biến này không sử dụng, tránh bị complier tối ưu hóa xóa cái biến này đi.
+
+> Dùng trong code cho MCU, ép buộc 1 biến truy cập đến địa chỉ và nó không bị xóa khỏi bộ nhớ khi biến đó k được sử dụng.
+
+```c
+     // Dùng trong code VDK
+
+     #include "stm32f4xx.h"
+     volatile unit8_t var = 0;
+
+```
+
+**Ứng dụng:** Đọc giá trị cảm biến nhiệt độ nhiệt độ, ví dụ có 10 giá trị 30 độ C giống nhau, thì có nguy cơ biến CB nhiệt độ bị xóa khỏi bộ nhớ. Vì vậy, sử dụng biến Volatile đảm bảo cảm biến nhận đúng giá trị không bị cấp thoát, hạn chế sai số.
+
+## 4. Register
+
+![](https://github.com/hthuan02/C_Cpp_Advance/blob/main/C_Advance/Bai4_Extern_Static_Volatile_Register/img/register.png)
+
+Khi thực thi 1 chương trình sẽ trải qua 4 giai đoạn:
+
+**(1):** Lưu trữ từ trong bộ nhớ RAM, thực hiện tính toán.
+
+**(2):** Thao tác tính toán các giá trị.
+
+**(3):** Tính xong thì lưu giá trị trong thanh ghi.
+
+**(4):** Lấy giá trị trong thanh ghi trả về biến trong RAM, kết quả = 6.
+
+
+**Ứng dụng của biến register:**
+
+- Khai báo biến register, thì chương trình chỉ thực hiện tính toán và lưu giá trị trên thanh ghi( bị lượt bỏ 2 bước đầu-cuối: Lưu trữ trên RAM và trả kqua từ thanh ghi lên RAM). Giúp rút ngắn thời gian chạy và tăng hiệu suất làm việc của chương trình.
+     
+- Chỉ sử dụng cho biến cục bộ.
+
 </details>
 
 <details>
   <summary><h3>Bài 6: Goto - Setjmp</h3></summary>
+## I. Goto
+>Cho phép đoạn code nhảy đến label(nhãn) mà mình chỉ , label có để đặt bất cứ vị trí nào trong cùng 1 hàm.
+
+- _VD1: Tạo Menu sử dụng lệnh Goto_
+   
+```c
+  #include<stdio.h>
+
+  int main(int argc, char const *argv[])
+  {
+    int option;
+    menu1:
+    do{
+      printf("Menu1\n");
+      printf("1: Tao ra menu thu ....\n");
+      printf("2....\n");
+      printf("3....\n");
+      printf("%d....\n",option);
+    } while(option != 1);
+
+  switch (option){
+    case 1:
+      printf("Menu2\n");
+      printf("0: Quay lai Menu 1\n");
+      printf("1: Ket thuc chuong trinh\n");
+      printf("2....\n");
+      scanf("%d",&option);
+      break;
+    
+      switch (option){
+        case 0:
+          /* goto <label> */
+          goto menu1;
+        case 1:
+          goto thoatchuongtrinh;
+        case 2:
+          break;
+        }
+        break;
+
+        case 2:
+          /* code */
+        break;
+
+      case 3:
+        /* code */
+      break;
+
+      default:
+        break;         
+    }
+    thoatchuongtrinh:
+    return 0;
+  }
+```
+
+   - Chương trình chạy tuần tự từ Menu1 đến Menu2. Nhưng ở Menu2 có 2 Option:
+      - `case 0:`: Dùng lệnh `goto menu1;` và đặt lệnh `menu1:` ở đầu Menu1, chương trình sẽ trở về Menu1.
+      - `case 1`: Lệnh `goto thoatchuongtrinh;` và đặt lệnh `thoatchuongtrinh:` ở cuối, chỉ định chương trình thoát ra khỏi switch để kết thúc chương trình.
+  
+## Nhược điểm của Goto:
+-  Vì chương trình không chạy tuần tự, nên code khó đọc, khó quản lý và bảo trì.
+-  Khó debug, vì khó xác định được vị trí gây lỗi.
+
+## Ưu điểm:
+
+### 1. Thoát khỏi nhiều cấp độ vòng lặp
+   
+>Đối chương trình nhiều cấp độ vòng lặp, mình muốn thoát ra thì phải xét điều kiện và break để thoát chương trình, sẽ phức tạp.
+
+_- VD2:_
+   
+```c
+   int i,j;
+
+   while(1){
+      for(i=1; i<5; i++ ){
+         for(j=1; j<5; j++ ){
+            if (i == 2 && j == 3){
+               printf("break for j\n");
+               break; //Chi thoat duoc For cua j 
+            }
+         if (i == 2 && j == 3){
+               printf("break for i\n");
+               break; //Thoat duoc For cua i 
+            }
+         }
+      }
+      if (i == 2 && j == 3){
+         printf("break while \n");
+         break; //Thoat duoc For cua while       
+      }
+   } 
+```
+- Sử dụng `goto` để thoát chương trình nhanh hơn.
+
+```c
+   int i,j;
+
+   while(1){
+      for(i=1; i<5; i++ ){
+         for(j=1; j<5; j++ ){
+               if (i == 2 && j == 3){
+               printf("Thoat chuong trinh\n");
+               goto thoat; //1 lenh goto, thoat duoc 3 vong lap
+         }
+      }
+   thoat: 
+   return 0;
+   }
+```
+### ỨNG DỤNG
+ Dùng trong Led ma trận, kết hợp với thuật toán quét led.
+
+## II. Thư viện <setjmp.h>
+> Cho phép chương trình có thể nhảy từ nhãn đặt trong hàm này sang nhãn đặt trong hàm khác thông qua setjmp và longjmp.
+>
+> Thư viện setjmp.h bao gồm 2 hàm setjmp và longjmp.
+>
+> Xử lý ngoại lệ 
+
+### 1. Hàm setjmp
+```c
+   int setjmp(jmp_buf);
+```
+
+- Khi gọi `setjmp` lần đầu, thì mặc định trả về 0.
+
+### 2. Hàm longjmp
+```c
+   longjmp(jmp_buf, int value);
+```
+
+- Khi gọi `longjmp` thì luồng của chương trình sẽ nhảy về `setjmp`. Sau đó, gán giá trị của `int value` vào giá trị mới của `setjmp`
+
+_- VD3:_
+
+
+### 3. Xử lý ngoại lệ(TRY, CATCH, THROW) (Chưa hoàn thành)
+</details>
+
+<details>
+  <summary><h3>Bài 7: Struct & Union</h3></summary>
+
+## 1. Struct
+
+> Struct là 1 dạng kiểu dữ liệu, cho phép người dùng tự định nghĩa. Nhóm các kiểu dữ liệu như: int, char, double,... lại thành kiểu dữ liệu mới. 
+>
+> Kích thước của Struct = Tổng các kích thước dữ liệu + padding 
+
+
+```c
+    #include <stdio.h>
+    #include <stdint.h> // Thư viện để sử dụng uint32_t, uint8_t, uint16_t
+
+    struct Data {
+      int a;
+      double b;
+      char c;
+    };
+
+    struct Data data1, data2, data3;
+
+```
+
+hoặc:
+```c
+    typedef struct Data{
+      int a;
+      double b;
+      char c;
+    } Data;
+
+    Data *data1, data2, data3;
+
+```
+
+- Trong hàm `main.c` thì `data.a = 0;`
+- Đối với con trỏ `*ptr` thì `data ->a = 0;`
+
+_VD1:_
+
+```c
+    #include <stdio.h>
+    #include <stdint.h> // Thư viện để sử dụng uint32_t, uint8_t, uint16_t
+
+    typedef struct {
+      uint32_t var1;
+      uint8_t var2;
+      uint16_t var3;
+    } data; // Tên kiểu dữ liệu là data
+
+    int main(int argc, char const *argv[]) {
+      printf(" Size of data: %d\n");
+      data data;
+
+      printf("Address of var1: %p\n", &data.var1);
+      printf("Address of var2: %p\n", &data.var2);
+      printf("Address of var3: %p\n", &data.var3);
+
+      return 0;
+    }
+```
+## Data alignment & padding
+
+- Data alignment: Là việc canh chỉnh, sắp xếp dữ liệu được sắp xếp dữ liệu vào đúng kích thước của CPU (gồm 2 byte, 4 byte, 8 byte,..). Đảm bảo hiệu suất hoạt động của bộ nhớ, dễ dàng truy cập và xử lý nhanh hơn.
+
+- Padding(đệm vào): Khi canh chỉnh, sắp xếp bộ nhớ còn dư ra 1 vài byte trên tổng số ổ đĩa thì đó là padding.
+
+```c
+    //double(8byte): Chia het 8, 0x00 0x08 0x10 0x18,..
+    //int, int32_t, uint32_t(4byte): 0x00 0x04 0x08 0x0C...
+    //float, init16_t, uint16_t(2byte): 0x00 0x02 0x04 0x06...
+    //padding
+```
+➡️ Kích thước của Struct = tổng các kiểu dữ liệu + padding
+  
+**_VD2: Tìm kích thước struct VD1_**
+
+```c
+    typedef struct {
+      uint32_t var1; //Chia hết cho 8 (4byte) 
+      uint8_t var2; //1byte
+      uint16_t var3; //2byte
+    } data;
+```
+- Giải thích: Ưu tiên kích thước dữ liệu lớn nhất làm chuẩn (4byte).
+    - var1 (4byte)
+
+    - var2 (1byte) + var3 (2byte) = 3 byte (dư 1 byte) -> 1 padding
+
+    - Tổng = 8
+
+**_VD3: Tìm kích thước_**
+
+```c
+      uint8_t var1[9]; //1byte 
+      uint64_t var2[3]; //8byte
+      uint16_t var3[10]; //2byte
+      uint32_t var4[2]; //4byte
+
+```
+
+- Giải thích:
+    - Kích thước lớn nhất là 8 byte.
+    
+    - var1: 8byte(làm chuẩn) + (1byte lẻ + 7padding) = 16  
+    
+    - var2: 8byte *3 = 24
+    
+    - var3: 8byte *2 + (4byte lẻ + 4padding) = 24
+    
+    - var4: 8byte
+    
+    - Tổng kích thước = 72 byte
+
+### Ứng dụng của Struct: 
+    
+- Json
+- Cấu trúc dữ liệu list
+- Giao thức trong MCU, mỗi thông số đều có cấu hình khác nhau -> Dùng Struct để gom các thông số về.
+
+## 2. Union
+
+>
+> Giống với struct, đây là kiểu dữ liệu người dùng tự định nghĩa bằng cách nhóm các kiểu dữ liệu lại.
+>
+> Union sử dụng chung vùng nhớ, các thành phần đều chung địa chỉ -> Giá trị này thay đổi thì những giá trị khác sẽ thay đổi.
+>
+> Kích thước Union = Tổng member có kích thước lớn nhất + padding.
+
+**_VD4: Kiểm tra kích thước của Union_**
+```c    
+#include <stdio.h>
+#include <stdint.h>
+
+typedef union
+{
+    uint8_t var1; // 1byte
+    uint32_t var2; // 4 byte
+    uint16_t var3; // 2 byte
+
+    // Union sẽ lấy kiểu dữ liệu có kích thước lớn nhất 24 byte
+} frame;
+
+int main(int argc, char const *argv[])
+{
+
+    printf("Size = %d\n", sizeof(frame)); //Kích thước lớn nhất 4byte
+    frame data;
+
+    data.var1 = 5;
+    data.var2 = 6;
+    data.var3 = 7;
+    //Vì dữ liệu kiểu Union-> SD chung vùng nhớ
+    //Lấy data sau cùng
+    printf("Var1 = %d\n", data.var1);   //7
+    printf("Var2 = %d\n", data.var2);   //7
+    printf("Var3 = %d\n", data.var3);   //7
+    return 0;
+}
+```
+
+**Trường hợp đặc biệt của VD4:**
+
+```c
+    int main(int argc, char const *argv[])
+    {
+    
+        printf("Size = %d\n", sizeof(frame));
+        frame data;
+
+        data.var2 = 4294967294;
+
+        printf("Var1 = %d\n", data.var1); //254   
+        printf("Var2 = %u\n", data.var2); //4294967294
+        printf("Var3 = %d\n", data.var3); //65534
+        return 0;
+    }
+```
+
+- Giải thích:
+    - Vì `data.var2 = 4294967294;` chuyển sang binary = 11111111 11111111 11111111 11111110
+    
+    - Địa chỉ bắt đầu, 0x01 lưu byte thấp nhất.
+  
+        | 0x01 | 0x02 | 0x03|0x04|
+        | :---: | --- | ---: | ---: |
+        | 11111110 | 11111111 | 11111111 | 11111111 |
+        | 254 | 65535 | 65535 | 65535 |
+
+    -  var1: 1byte = 254 (0x01)
+  
+    -  var2: 4byte = 4294967294 (4 ô địa chỉ)
+
+    -  var3: 2byte = 65534 (0x01+0x02)
 
 </details>
