@@ -564,7 +564,7 @@ _VD2: Static biến cục bộ_
 
 ## 4. Register
 
-![](https://github.com/hthuan02/C_Cpp_Advance/blob/main/C_Advance/Bai4_Extern_Static_Volatile_Register/img/register.png)
+![](https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai5_Storage%20Classes/register.png)
 
 Khi thực thi 1 chương trình sẽ trải qua 4 giai đoạn:
 
