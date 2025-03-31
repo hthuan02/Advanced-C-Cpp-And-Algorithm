@@ -587,6 +587,7 @@ Khi thực thi 1 chương trình sẽ trải qua 4 giai đoạn:
 
 <details>
   <summary><h3>Bài 6: Goto - Setjmp</h3></summary>
+  
 ## I. Goto
 >Cho phép đoạn code nhảy đến label(nhãn) mà mình chỉ , label có để đặt bất cứ vị trí nào trong cùng 1 hàm.
 
