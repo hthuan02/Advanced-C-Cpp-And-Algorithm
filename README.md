@@ -390,7 +390,7 @@ int main()
 </details>
 
 <details>
-  <summary><h4>VD3:(Hoàn thiện nhất) Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào, có số 0 bên trong phần tử</h4></summary>
+  <summary><h4>VD3: (Hoàn thiện nhất) Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào, có số 0 bên trong phần tử</h4></summary>
 
 ```c
 #include <stdio.h>
