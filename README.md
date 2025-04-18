@@ -2,7 +2,7 @@
 ---
 
 <details>
-  <summary><h3>Bài 1: Compiler - Marco</h3></summary>
+  <summary><h3>Bài 1: Compiler - Macro</h3></summary>
 
 IDE gồm: `Dev-C++, VS Code(đã cài Extensions), Arduino IDE, KeilC, STM32CubeIDE,...`
 
@@ -11,15 +11,18 @@ IDE gồm: `Dev-C++, VS Code(đã cài Extensions), Arduino IDE, KeilC, STM32Cub
 - Complier: Trình biên dịch, chuyển đổi ngôn ngữ bậc cao sang ngôn ngữ máy.
 
 ## I. Quá trình Compiler
+
+![](E:\Desktop\AUTOSAR\Advanced-C-Cpp-and-Algorithm\C\Bai1_Complier_Macro\Complier\img)
+
 Gồm 4 bước chính:
 
-- Tiền xử lý (Preprocessor).
+- Tiền xử lý (Preprocessor)
 
-- Compiler.
+- Biên dịch (Compiler)
 
-- Asembler.
+- Dịch hợp ngữ (Asembler)
 
-- Linker.
+- Liên kết (Linker)
 
 ### 1. Tiền xử lý (Preprocessor)
 (Chuyển file a.c, file b.h thành file main.i)
@@ -32,8 +35,8 @@ Gồm 4 bước chính:
 >
 > Macro `#define` thì bị thay thế bằng đối tượng khác, còn lại giữ nguyên.
 
-### 2. Complier
-(chuyển file main.i thành file main.s)
+### 2. Biên dịch (Complier)
+(Chuyển file main.i thành file main.s)
 
 `gcc -S main.i -o main.s`
 
@@ -41,8 +44,8 @@ Gồm 4 bước chính:
 >
 > Thao tác trên RAM mượt mà hơn.
 
-### 3. Assembler
-(chuyển file main.s thành file main.o)
+### 3. Dịch hợp ngữ (Assembler)
+(Chuyển file main.s thành file main.o)
 
 `gcc -c main.s -o main.o`
 
@@ -50,28 +53,28 @@ Gồm 4 bước chính:
 >
 > Nếu code trên VDK thì chương trình lưu vào bộ nhớ Flash.
 
-### 4. Linker
+### 4. Liên kết (Linker)
 (Liên kết các file main.o, build lại thành file main.exe)
 
 `gcc main.o test.o -o main`
 
 `./main`
 
-## II. Marcro
+## II. Macro
 
-> Macro là những từ chỉ thông tin xử lý, xảy ra ở quá trình tiền xử lý `#include`, `#define`, `#ifndef`, `#if`,...
+> Macro là những từ chỉ thông tin xử lý, xảy ra ở quá trình tiền xử lý (`#include`, `#define`, `#ifndef`, `#if`, `#endif`,... là các macro).
 
 ### 1. Macro chỉ thị bao hàm tệp
 
 - #include< >: Tìm file trong thư mục cài đặt.
 
-- #include" ": Tìm file trong thư mục hiện tại.
+- #include" ": Tìm file ở thư mục hiện tại.
 
 ### 2. Macro chỉ thị định nghĩa
 
 - #define: Định nghĩa 1 đối tượng(biến, hàm, mảng)
 
-_VD1: Define trên nhiều dòng_ 
+_VD1: define trên nhiều dòng_ 
 
 ```c
   #define CREATE_FUNC(name_func, cmd) \
@@ -115,13 +118,14 @@ _VD3_
 ```
 
 - Macro Variadic: Cho phép 1 hàm có thể nhận số lượng tham số truyền vào không xác định.
+
 ```c
 #define sum(...) __VA_ARGS__
 ```
 
 _VD4: Tính tổng với số lượng số bất kỳ (1 sum)_
 ```c
-  #define sum(...) __VA_ARGS__  \
+  #define sum(...)              \
   int arr[] = {__VA_ARGS__, 0}; \
   int tong = 0;                 \
   int i = 0;                    \
@@ -167,7 +171,7 @@ int main(int argc, char const *argv[])
 
 - `0`: Dấu hiệu kết thúc chuỗi, vòng lặp sẽ dừng khi gặp số 0.
 
-- **Tại sao sử dụng do...while(0)?**
+- **Tại sao sử dụng do...while(0) ở chương trình nhiều sum?**
 
   > Giả sử không có `do...while(0)`, thì khi gọi `sum()` lần 2 thì nó sẽ tạo 2 mảng `arr[]` thêm 2 lần. Tạo thành 2 biến cục bộ bị trùng tên trong main -> Bị lỗi.
   >
@@ -195,7 +199,239 @@ int main(int argc, char const *argv[])
 </details>
 
 <details>
+  <summary><h3>Bài 2: STDARG - ASSERT</h3></summary>
+
+## I. Thư viện stdarg
+(Tương tự macro variadic)
+
+> Cho phép làm việc với những hàm có số lượng tham số truyền vào (input parameter) không xác định (VD: Hàm `printf`, `scanf`).
+
+### 1. va_list
+
+> `va_list`: Khai báo biến để duyệt các đối số
+
+```c
+  void test(int count, ...)
+  {
+    // `int count`: xác định số lượng tham số.
+    // `...`: danh sách đối số không xác định.
+
+    va_list args;
+    // typedef char* va_list;
+    // char* args;
+    // args = "int count, 1, 2, 6"
+  }
+```
+- va_list: là một kiểu dữ liệu đã được định nghĩa lại, là 1 chuỗi. Có thể viết `typedef char* va_list;`
+
+- `va_list args`: tương đương khai báo `char* arg;`, là một biến con trỏ thuộc kiểu char, có 2 TH sử dụng:
+
+  - Có thể hoạt động như 1 mảng, từng phần tử trong mảng là kí tự. 
+
+  - Lưu trữ chuỗi (chuỗi đó tương ứng với tham số `int count,...`)
+    VD: args = "int count, 1, 2, 6"
+    
+### 2. va_start
+
+> `va_start`: Dùng để truy xuất ra danh sách đối số cần thao tác.
+
+```c
+  void test(int count, ...)
+  {
+    // `int count`: xác định số lượng tham số.
+    // `...`: danh sách đối số không xác định.
+
+    va_list args;
+
+    va_start(args, count); // args = "1,2,6" / args = {'\1','\2','\3'}(escape character)
+  }
+```
+- `va_start(args, count)`: 
+  
+  - Tham số đầu tiên `args` chứa dữ liệu bắt đầu thao tác là chuỗi `args = "int count, 1, 2, 6"`
+
+  - Tham số thứ 2: Truyền vào tên biến `count`, để tách ra "1,2,6".
+
+- Thực hiện so sánh chuối `"int count, 1, 2, 6"` với `count`. Xóa `int count` để tách ra `1,2,6`.
+
+### 3. va_arg
+> `va_arg`: Lấy từng đối số trong danh sách ra và ép kiểu 
+
+```c
+  void test(int count, ...)
+  { 
+      va_list args; 
+
+      va_start(args, count); // args = "1,2,6" / args = {'\1','\2','\3'}
+
+      printf("value 1: %d\n",va_arg(args, int)); // (int)'\1' = 1, ép kiểu int
+      printf("value 2: %d\n",va_arg(args, int)); // (int)'\2' = 2, int
+      printf("value 3: %d\n",va_arg(args, int));
+      printf("value 4: %f\n",va_arg(args, double));
+      printf("value 5: %c\n",va_arg(args, char*)); // Chuỗi phải ép về kiểu `char*`
+      printf("value 6: %s\n",va_arg(args, char*));
+
+  }
+
+  int main(int argc, char const *argv[])
+  {
+      test(6, 1, 2, 6, 3.15, 'a',"HELLO");  // count: để xác định số lượng tham số
+      
+      return 0; 
+  }
+```
+
+- `va_arg(args, int)`: Trong đó
+  
+  - `args`: Là kết sau sau khi `va_start()` thực hiện
+
+  - `int`: Dùng để ép kiểu dữ liệu
+
+- Mỗi lần macro `va_arg()` gọi ra thì sẽ lấy ra 1 giá trị và ép kiểu dữ liệu, sau đó trỏ đến phần tử tiếp theo. Gọi lần lượt từ `1`, `2`, `6`.
+
+### 4. va_end
+> `va_end`: Kết thúc thao tác với `args`, nói cách khác là thu hồi địa chỉ của con trỏ 
+
+### 5. va_copy
+> `va_copy`: Sao chép dữ liệu giữa 2 biến cùng kiểu va_list.
+
+### 6. Ứng dụng của thư viện stdarg
+
+<details>
+  <summary><h4>_VD1: Tính tổng các tham số truyền vào, biết số lượng phần tử truyền vào_</h4></summary>
+  
+```c
+  #include <stdio.h>
+  #include <stdarg.h>
+
+  int sum(int count, ...) // count: tham số cố định, đại diện cho số lượng tham số biến đổi
+  {
+      va_list args;
+      va_start(args, count);
+
+      int result = 0;
+      for (int i = 0; i < count; i++)
+      {
+          result += va_arg(args, int);
+      }
+
+      va_end(args);
+      return result;
+  }
+
+  int main()
+  {
+      printf("Sum: %d\n", sum(3, 1, 5, 9));
+      
+      printf("Sum: %d\n", sum(5, 1, 5, 9, 10, 15));
+
+      return 0;
+  }
+```
+#### Nhược điểm: Bị phụ thuộc vào tham số đầu tiên `count`
+</details>
+
+
+_VD2: Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào_
+
+#### Khắc phục: sử dụng thêm macro variadic
+```c
+#include <stdio.h>
+#include <stdarg.h>
+
+#define tong(...)   sum(__VA_ARGS__, 0)
+
+// tong(3,1,4,5,-1,-2) -> sum(3,1,4,5,-1,-2,0) 
+
+// K biết được số lượng tham số ban đầu -> while
+int sum(int count, ...)
+{
+    va_list args;
+
+    va_start(args, count);
+
+    /************************************************************************
+     * Khởi tạo result mang giá trị tham số đầu tiên count
+     * Khi tính tổng thì đã có sẵn giá trị rồi và cộng dồn giá trị tiếp theo
+     ************************************************************************/
+    int result = count; 
+    
+    int value; // Biến tạm, để lưu trữ tạm thời giá trị để so sánh
+
+    // Duyệt qua từng phần tử, khác 0 thì cộng dồn vào
+    while ((value = va_arg(args, int)) != 0)
+    {
+        result += value;
+
+        // Nếu không dùng biến tạm
+        /**********************************************************************
+         * result += va_arg(args, int);
+         *
+         * Gặp vấn đề: 
+         * va_arg() lấy giá trị trước để so sánh
+         * nhưng khi cộng thì cộng giá trị tiếp theo, bỏ qua 1 giá trị
+         **********************************************************************/
+    }
+    
+    va_end(args);
+    
+    return result;
+}
+
+int main()
+{
+    printf("Tổng: %d\n", tong(3, 1, -1, 0, 1, 2, 3, 15)); // 3    // Nhược điểm là chỉ tính tổng số trước số 0, tới 0 while sẽ dừng lại 
+
+    return 0;
+}
+```
+#### Nhược điểm: Nếu bên trong các phần tử có số 0, thì while sẽ dừng lại không cộng nữa.
+
+_VD3:(Hoàn thiện nhất) Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào, có số 0 bên trong phần tử_
+
+```c
+#include <stdio.h>
+#include <stdarg.h>
+
+#define tong(...)   sum(__VA_ARGS__, '\n')
+
+int sum(int count, ...)
+{
+    va_list args;
+    va_list check;
+
+    va_start(args, count);
+    va_copy(check, args);
+
+    int result = count; 
+    
+    while ((va_arg(check, char*)) != (char*)'\n')
+    {
+        result += va_arg(args, int);
+    }
+    
+    va_end(args);
+    
+    return result;
+}
+
+int main()
+{
+    printf("Tổng: %d\n", tong(3, 1, -1, 0, 1, 2, 3, 15)); // 24
+
+    return 0;
+}
+
+
+```
+## II. Assert
+
+</details>
+
+<details>
   <summary><h3>Bài 4: Pointer</h3></summary>
+
+# A. Phần 1
 
 > Con trỏ là 1 biến, không dùng lưu giá trị mà nó dùng để lưu địa chỉ của 1 đối tượng(biến, hàm, mảng,...)
 
@@ -203,14 +439,14 @@ _Sự khác nhau biến & con trỏ:_
 
   |                   | `int var = 0;`     | `int *ptr = &var;` |
   |-------------------|-----------------------|---------------------------|
-  | **Address**       | `0x01 0x02 0x03 0x04`(Vùng địa chỉ)  | `0xc1` `0xc2` `0xc3` `0xc4` `0xc5`...`0xc8`                  |
-  | **Value**         | `0b00..00`(Số cụ thể)             | `0x01` `0x02` `0x03` `0x04` `0x00`...`0x00` (Vùng địa chỉ)                     |
+  | **Address**       | `0x01 0x02 0x03 0x04`(int-4byte)  | `0xc1` `0xc2` `0xc3` `0xc4` `0xc5`...`0xc8`(Kiến trúc máy tính 64bit-8byte)                  |
+  | **Value**         | `0b00..00`(32bit)             | `0x01` `0x02` `0x03` `0x04` `0x00`...`0x00` (Lưu 4byte int, không còn thì 0x00)                     |
 
-  - `0b00000000(MSB) 00000000 00000000 00000000(LSB)`: LSB(Địa chỉ bắt đầu-Thấp nhất) -> MSB-Cao nhất
+  - `0b00000000(MSB) 00000000 00000000 00000000(LSB)`: LSB(Thấp nhất) -> MSB(Cao nhất)
 
 ## 0. Cách sử dụng Pointer
 
-- **Khai báo con trở**
+- **Khai báo con trỏ**
 ```c
   int *ptr_int;       // con trỏ đến kiểu int
   char *ptr_char;     // con trỏ đến kiểu char
@@ -252,24 +488,22 @@ _VD:_  STM32/32bit --> 4byte
 ```
 ## 2. Regular Pointer(Con trỏ với biến)
 
-> Kiểu dữ liệu(short, int, float, double,...) ảnh hưởng đến việc truy xuất giá trị, quyết định đọc bao nhiêu byte trong vùng nhớ.
+> Kiểu dữ liệu ảnh hưởng đến việc truy xuất giá trị, quyết định đọc bao nhiêu byte trong vùng nhớ.
+>
+> Kiểu dữ liệu khai báo biến và kiểu dữ liệu con trỏ phải đồng bộ với nhau.
 
 _VD: (Lấy ở đầu bài)_
 ```c
   int var = 10;
   int *ptr = &var;
 ```
-  - Address:  0xc1 0xc2 0xc3 0xc4 0xc5 ... 0xc8 (8byte)
 
-  - Value:    0x01 0x02 0x03 0x04 0x00 ... 0x00 (int-4byte)
-              (LSB -> MSB)
+## 3. Array Pointer(Con trỏ với mảng)
 
-  - Nếu `double` 0x01 0x02 0x03 0x04 0x05 ... 0x08  
+> Vùng nhớ câp phát cho mảng(kích thước của mảng) phụ thuộc vào (số lượng phần tử) * (kiểu dữ liệu).
 
-## 3. Array Pointer(Con trỏ mảng)
-
-> Vùng nhớ câp phát cho mảng phụ thuộc vào (số lượng) * (kiểu dữ liệu)
-  ```c
+_VD:_
+```c
   #include<stdio.h>
     
   int main(){
@@ -279,20 +513,25 @@ _VD: (Lấy ở đầu bài)_
 
     int *ptr = arr; // mảng thì không cần dấu '&'
 
-    // ptr:    vùng địa chỉ phần tử đầu tiên 0
+    // ptr:    vùng địa chỉ phần tử 0
     // ptr+1:  vùng địa chỉ phần tử thứ 1
     // ptr+2:  vùng địa chỉ phần tử thứ 2
     
     // ptr + i.sizeof(data_type)
     for (int i = 0; i < n; i++)
     {
-        printf("Địa chir = %p - Giá trị: %d\n", ptr+i, *(ptr+i)); // Giải tham chiếu tìm giá trị
+        printf("Địa chỉ = %p - Giá trị: %d\n", ptr+i, *(ptr+i)); // Giải tham chiếu tìm giá trị
     }
 
     return 0;
   }
 ```
+## 4. Ứng dụng con trỏ
 
+_VD: Hoán đổi swap(a,b)_
+
+
+# B. Phần 2
 
 ## 4. Void Pointer
 > Là 1 biến, có thể trỏ đến bất kỳ địa chỉ có kiểu dữ liệu nào cũng được, nó không quan tâm các kiểu dữ liệu như (char, int, float, double,...).
