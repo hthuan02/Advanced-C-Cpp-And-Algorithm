@@ -298,7 +298,7 @@ int main(int argc, char const *argv[])
 ### 6. Ứng dụng của thư viện stdarg
 
 <details>
-  <summary><h4>_VD1: Tính tổng các tham số truyền vào, biết số lượng phần tử truyền vào_</h4></summary>
+  <summary><h4>VD1: Tính tổng các tham số truyền vào, biết số lượng phần tử truyền vào</h4></summary>
   
 ```c
   #include <stdio.h>
@@ -331,8 +331,8 @@ int main(int argc, char const *argv[])
 #### Nhược điểm: Bị phụ thuộc vào tham số đầu tiên `count`
 </details>
 
-
-_VD2: Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào_
+<details>
+  <summary><h4>VD2: Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào</h4></summary>
 
 #### Khắc phục: sử dụng thêm macro variadic
 ```c
@@ -387,7 +387,10 @@ int main()
 ```
 #### Nhược điểm: Nếu bên trong các phần tử có số 0, thì while sẽ dừng lại không cộng nữa.
 
-_VD3:(Hoàn thiện nhất) Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào, có số 0 bên trong phần tử_
+</details>
+
+<details>
+  <summary><h4>VD3:(Hoàn thiện nhất) Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào, có số 0 bên trong phần tử</h4></summary>
 
 ```c
 #include <stdio.h>
@@ -422,9 +425,11 @@ int main()
     return 0;
 }
 
-
 ```
-## II. Assert
+
+</details>
+
+## II. Assert (đang làm)
 
 </details>
 
