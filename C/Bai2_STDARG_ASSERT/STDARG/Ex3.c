@@ -18,7 +18,7 @@ int sum(int count, ...)
         result += va_arg(args, int);
     }
     
-    va_end(args);
+    va_end(args); // Thu hồi 1 trong 2: args hoặc check
     
     return result;
 }

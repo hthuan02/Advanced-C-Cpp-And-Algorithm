@@ -298,7 +298,7 @@ int main(int argc, char const *argv[])
 ### 6. Ứng dụng của thư viện stdarg
 
 <details>
-  <summary><h4>VD1: Tính tổng biết số lượng phần tử truyền vào</h4></summary>
+  <summary><h4>VD1: Tính tổng các tham số truyền vào, biết số lượng phần tử truyền vào</h4></summary>
   
 ```c
   #include <stdio.h>
@@ -332,7 +332,7 @@ int main(int argc, char const *argv[])
 </details>
 
 <details>
-  <summary><h4>VD2: Tính tổng không biết số lượng phần tử truyền vào</h4></summary>
+  <summary><h4>VD2: Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào</h4></summary>
 
 #### Khắc phục: sử dụng thêm macro variadic
 ```c
@@ -390,7 +390,7 @@ int main()
 </details>
 
 <details>
-  <summary><h4>VD3: (Hoàn thiện nhất) Tính tổng không biết số lượng phần tử truyền vào, có số 0 trong phần tử</h4></summary>
+  <summary><h4>VD3:(Hoàn thiện nhất) Tính tổng các tham số truyền vào, không biết số lượng phần tử truyền vào, có số 0 bên trong phần tử</h4></summary>
 
 ```c
 #include <stdio.h>
@@ -429,7 +429,72 @@ int main()
 
 </details>
 
-## II. Assert (đang làm)
+**Lưu ý:** Nếu 1 hệ thống sử dụng nhiều cảm biến, mà viết nhiều hàm thì chương trình sẽ phức tạp. Thì thư viện stdarg có thể giúp viết 1 hàm mà sử dụng nhiều loại CB khác nhau. 
+
+## II. Thư viện Assert
+
+> Thư viện sử dụng để debug(kiểm tra chương trình có lỗi hay không). Dùng `#define NDEBUG` để tắt debug.
+> 
+> Cung cấp macro assert, để kiểm tra một điều kiện. 
+
+- Nếu điều kiện đúng (true), không có gì xảy ra và chương trình tiếp tục thực thi.
+
+- Nếu điều kiện sai (false), chương trình dừng lại và thông báo một thông điệp lỗi.
+
+_VD1:_
+
+```c
+#include <stdio.h>
+#include <assert.h>
+
+int main()
+{
+    int x = 5;
+
+    assert(x == 6); // Sai
+
+    // Chương trình sẽ tiếp tục thực thi nếu điều kiện là đúng.
+    printf("X is: %d", x);
+   
+    return 0;
+}
+```
+- Chương trình chạy sai sẽ in ra vị trí, dòng lỗi và file lỗi.
+`Assertion failed: x == 6, file Ex1.c, line 8`
+
+#### Macro dùng để debug
+
+```c
+#define LOG(condition, cmd) assert(condition && #cmd)
+```
+_VD2:_
+```c
+#include <stdio.h>
+#include <assert.h>
+
+#define LOG(condition, cmd) assert(condition && #cmd)
+
+double divide(int a, int b)
+{   
+
+    // assert(b != 0 && "Lỗi chia cho 0");
+    LOG(b != 0, Lỗi chia cho 0);
+    return (double)a/b;
+}
+
+int main(int argc, char const *argv[])
+{
+    int x = 5;
+
+    // assert(x == 5 && "X phải bằng 5");
+
+    LOG(x == 5, X phải bằng 5);
+    printf("x = %d\n", x);
+
+    printf("Kết quả phép chia: %f\n",divide(2,0));
+    return 0;
+}
+```
 
 </details>
 
