@@ -502,6 +502,10 @@ int main(int argc, char const *argv[])
 <details>
   <summary><h3>Bài 3: Bitmask</h3></summary>
 
+> Bitmask là kỹ thuật thao tác từng bit trong 1 biến. Mỗi bit có thể lưu trữ thông tin, thao tác với các cờ (flags) hoặc trạng thái khác nhau.
+>
+> Bitmask dùng để tối ưu hóa bộ nhớ.
+
 _VD0: Rút gọn kích thước bộ nhớ_
 
 ```c
@@ -566,13 +570,9 @@ _VD1.2:_
   }
 ```
 
-> Bitmask là kỹ thuật thao tác từng bit trong 1 biến. Mỗi bit có thể lưu trữ thông tin, thao tác với các cờ (flags) hoặc trạng thái khác nhau.
->
-> Bitmask dùng để tối ưu hóa bộ nhớ.
-
 ## 1. Phép toán với Bit (Bitwise)
 
-<img src="" alt="Memory Layout" width="220"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai3_Bitmask/img/bang%20chan%20tri.png" alt="Memory Layout" width="220"/>
 
 - NOT bitwise `~`
 
