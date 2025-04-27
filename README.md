@@ -1248,8 +1248,7 @@ int main(int argc, char const *argv[])
 
 - Gồm có 5 phân vùng bộ nhớ, theo thứ tự từ trên xuống:
 
-    <img src="https://github.com/hthuan02/C_Cpp_Advance/blob/main/Bai8_Memory-layout/images/memorylayout.png" alt="Memory Layout" width="500"/>
-
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai8_Memory_layout/img/memorylayout.png" alt="Memory Layout" width="500"/>
 ## 1. Text segment
 
 > Chỉ có quyền đọc, không thể ghi(chỉnh sửa).
@@ -1611,7 +1610,7 @@ _VD4:_
 
 ## III. So sánh stack & heap
 
-<img src="https://github.com/hthuan02/C_Cpp_Advance/blob/main/Bai8_Memory-layout/images/stack_heap.png" alt="Memory Layout" width="220"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai8_Memory_layout/img/stack_heap.png" alt="Memory Layout" width="220"/>
 
 ### 1. Giống nhau:
 
