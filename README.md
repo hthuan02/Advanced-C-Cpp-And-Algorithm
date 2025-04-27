@@ -583,10 +583,10 @@ _VD1.2:_
 - XOR bitwise `^`
 
 ```c
-  int result = ~num ;
-  int result = num1 & num2;
-  int result = num1 | num2;
-  int result = num1 ^ num2;
+  int result1 = ~num ;
+  int result2 = num1 & num2;
+  int result3 = num1 | num2;
+  int result4 = num1 ^ num2;
 ```
 
 #### Shift left - Shift right bitwise
