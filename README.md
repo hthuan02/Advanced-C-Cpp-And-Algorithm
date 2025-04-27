@@ -498,6 +498,132 @@ int main(int argc, char const *argv[])
 
 </details>
 
+
+<details>
+  <summary><h3>Bài 3: Bitmask</h3></summary>
+
+_VD0: Rút gọn kích thước bộ nhớ_
+
+```c
+  #include<stdio.h >
+
+  int gender; // 4 byte
+  int status; 
+  int xemay;  
+  int maybay; 
+  int oto;    
+  int tau;    
+
+  // Tổng 24byte
+  int main()
+  {
+
+    return 0;
+  }
+```
+
+_VD1.1:_
+```c
+  #include<stdio.h >
+  #include<stdint.h> // Thư viện sử để sd kiểu dl uint8_t, uint16_t, uint32_t
+
+  // int8_t, uint8_t          1 byte = 8bit 
+  // int16_t, uint16_t        2 byte = 16bit
+  // int32_t, uint32_t, int   4 byte = 32 bit
+
+  uint8_t gender; // 1 byte
+  uint8_t status; 
+  uint8_t xemay;  
+  uint8_t maybay;
+  uint8_t oto;    
+  uint8_t tau;   
+
+  // Tổng 6byte
+  int main()
+  {
+
+    return 0;
+  }
+```
+
+_VD1.2:_
+
+```c
+  #include<stdio.h >
+  #include<stdint.h> // Thư viện sử để sd kiểu dl uint8_t, uint16_t, uint32_t
+
+  uint8_t user; // 0bxxxx xxxx
+  // bit 0: gender
+  // bit 1: status
+  // ...
+  // bit 5: tau
+  
+  // Tổng 1 byte
+  int main()
+  {
+
+    return 0;
+  }
+```
+
+> Bitmask là kỹ thuật thao tác từng bit trong 1 biến. Mỗi bit có thể lưu trữ thông tin, thao tác với các cờ (flags) hoặc trạng thái khác nhau.
+>
+> Bitmask dùng để tối ưu hóa bộ nhớ.
+
+## 1. Phép toán với Bit (Bitwise)
+
+<img src="" alt="Memory Layout" width="220"/>
+
+- NOT bitwise `~`
+
+- AND bitwise `&`
+
+- OR bitwise `|`
+
+- XOR bitwise `^`
+
+```c
+  int result = ~num ;
+  int result = num1 & num2;
+  int result = num1 | num2;
+  int result = num1 ^ num2;
+```
+
+#### Shift left - Shift right bitwise
+
+- Dịch trái `<<`, các bit ở bên phải sẽ được dịch sang trái, và các bit trái cùng được đặt giá trị 0.
+
+- Dịch phải `>>`, các bit ở bên trái sẽ được dịch sang phải, và các bit phải cùng được đặt giá trị 0 hoặc 1 tùy thuộc vào giá trị của bit cao nhất (bit dấu).
+ 
+```c
+uint8_t user1 = 0b00001111;
+uint8_t user2 = 0b11110001;
+
+user1 = ~user1; // 0b11110000
+user2 = ~user2: // 0b00001110
+
+user1 & user2;  // 0b00000001
+user1 | user2;  // 0b11111111
+user1 ^ user2;  // 0b11111110
+
+user1 = user1 << 1; // 0b00011110
+user1 <<= 2;        // 0b00111100
+user1 <<= 5;        // 0b11100000
+
+user2 = user2 >> 1; // 0b01111000
+user2 >>= 4;        // 0b00001111
+```
+
+## 2. Thao tác với Bit
+
+- NOT bitwise
+
+- Set Bit
+
+- Reset Bit
+
+</details>
+
 <details>
   <summary><h3>Bài 4: Pointer</h3></summary>
 
