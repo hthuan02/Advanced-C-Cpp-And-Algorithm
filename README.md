@@ -572,7 +572,7 @@ _VD1.2:_
 
 ## 1. Phép toán với Bit (Bitwise)
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai3_Bitmask/img/bang%20chan%20tri.png" alt="Memory Layout" width="220"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai3_Bitmask/img/bang%20chan%20tri.png" alt="Memory Layout" width="400"/>
 
 - NOT bitwise `~`
 
