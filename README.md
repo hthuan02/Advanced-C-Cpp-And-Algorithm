@@ -506,7 +506,7 @@ int main(int argc, char const *argv[])
 >
 > Bitmask dùng để tối ưu hóa bộ nhớ.
 
-_VD0: Rút gọn kích thước bộ nhớ_
+_VD11: Rút gọn kích thước bộ nhớ_
 
 ```c
   #include<stdio.h >
@@ -574,37 +574,23 @@ _VD1.2:_
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai3_Bitmask/img/bang%20chan%20tri.png" alt="Memory Layout" width="650"/>
 
-- NOT bitwise `~`
-
-- AND bitwise `&`
-
-- OR bitwise `|`
-
-- XOR bitwise `^`
-
-```c
-  int result1 = ~num ;
-  int result2 = num1 & num2;
-  int result3 = num1 | num2;
-  int result4 = num1 ^ num2;
-```
+| Toán tử | Ký hiệu | Ví dụ                                 |
+|---------|---------|----------------------------------------|
+| NOT     | `~`     | `~0b00001111 = 0b11110000`             |
+| AND     | `&`     | `0b1100 & 0b1010 = 0b1000`             |
+| OR      | `\|`    | `0b1100 \| 0b1010 = 0b1110`            |
+| XOR     | `^`     | `0b1100 ^ 0b1010 = 0b0110`             |
 
 #### Shift left - Shift right bitwise
 
 - Dịch trái `<<`, các bit ở bên phải sẽ được dịch sang trái, và các bit trái cùng được đặt giá trị 0.
 
-- Dịch phải `>>`, các bit ở bên trái sẽ được dịch sang phải, và các bit phải cùng được đặt giá trị 0 hoặc 1 tùy thuộc vào giá trị của bit cao nhất (bit dấu).
+- Dịch phải `>>`, các bit ở bên trái sẽ được dịch sang phải, và các bit phải cùng được đặt giá trị 0 hoặc 1 tùy thuộc vào giá trị của bit cao nhất .
  
+_VD2:_ 
 ```c
 uint8_t user1 = 0b00001111;
 uint8_t user2 = 0b11110001;
-
-user1 = ~user1; // 0b11110000
-user2 = ~user2: // 0b00001110
-
-user1 & user2;  // 0b00000001
-user1 | user2;  // 0b11111111
-user1 ^ user2;  // 0b11111110
 
 user1 = user1 << 1; // 0b00011110
 user1 <<= 2;        // 0b00111100
@@ -616,11 +602,167 @@ user2 >>= 4;        // 0b00001111
 
 ## 2. Thao tác với Bit
 
-- NOT bitwise
+| Thao tác    | Phép toán       | Mô tả                                                  |
+|-------------|-----------------|--------------------------------------------------------|
+| **Set bit** | `\|` (OR)        | Đặt bit từ 0 -> 1.                                    |
+| **Reset/Clear bit** | `& ~` (AND - NOT) | Xóa bit 1 -> 0.                                        |
+| **Check bit** | `&` (AND)       | Kiểm tra giá trị của bit.                              |
 
-- Set Bit
 
-- Reset Bit
+_VD3: Thực hiện thao tác với từng bit_
+
+  ```c
+  #include <stdio.h>
+  #include <stdint.h>
+
+  // Quy định từng bit mang thông tin gì, bằng macro định nghĩa
+  #define GENDER        1 << 0  // Bit 0: 0 = Nữ, 1 = Nam                 0b00000001 << 0
+  #define TSHIRT        1 << 1  // Bit 1: 0 = Không, 1 = Có               0b00000010
+  #define HAT           1 << 2  // Bit 2: 0 = Không, 1 = Có               0b00000100
+  #define SHOES         1 << 3  // Bit 3: 0 = Không, 1 = Có               0b00001000      
+  #define FEATURE1      1 << 4  // Bit 4: Tính năng 1                     0b00010000
+  #define FEATURE2      1 << 5  // Bit 5: Tính năng 2                     0b00100000
+  #define FEATURE3      1 << 6  // Bit 6: Tính năng 3                     0b01000000
+  #define FEATURE4      1 << 7  // Bit 7: Tính năng 4                     0b10000000
+
+
+  // enable bit (0 -> 1) - đặt bit
+  void enableFeature(uint8_t *options, uint8_t feature)// 0xa5 (0b00000000): 0x01 
+  {
+      // Truyền vào con trỏ `*options` lưu địa chỉ gốc, để thực hiện thao tác thay đổi địa chỉ từng bit
+      // Giải tham chiếu
+      // options: địa chỉ
+      // *options: giá trị
+      *options |= feature; // *option = *option | feature
+
+      //      0bxxxxxxxx
+      // OR   0b00000001 (bit 0)
+      //      0bxxxxxxx1
+      // OR   0b00001000 (bit 3)
+      //      0bxxxx1001 (result)
+
+      // enable bit (0->1)
+  }
+
+  // disable bit (1 -> 0)- Xóa bít
+  void disableFeature(uint8_t *options, uint8_t feature)
+  {
+      *options &= ~feature; // *options = *options & (~feature);
+
+      // ~ 0b00000001 (bit 0) = 0b11111110
+      // ~ 0b00001000 (bit 3) = 0b11110111
+      
+      //      0bxxxx1xx1 (result hàm 1)
+      // AND  0b11111110 (bit 0)
+      //      0bxxxx1xx0 
+      // AND  0b11110111 (bit 0)
+      //      0bxxxx0xx0
+
+      // disable (1->0)
+  }
+
+  // check bit 
+  int8_t isFeatureEnabled(uint8_t options, uint8_t feature)
+  {
+      return ((options & feature) != 0); // != thì bit đó đang bật lên
+
+      // AND với chính nó
+      // 0b1xx1xx1x & 0b10010010
+  }
+
+  // Liệt kê các tính năng đã bật
+  void listSelectedFeatures(uint8_t options)
+  {
+      printf("Selected Features:\n");
+
+      const char* featureName[] = {
+          "Gender",
+          "Shirt",
+          "Hat",
+          "Shoes",
+          "Feature 1",
+          "Feature 2",
+          "Feature 3",
+          "Feature 4"
+      };
+
+      for (int i = 0; i < 8; i++)
+      {
+          if ((options >> i) & 1)
+          {
+              printf("- %s\n", featureName[i]);
+          }
+      }
+  }
+
+
+  int main()
+  {   
+      uint8_t options = 0;    // 0x01: 0b0000 0000
+
+      // Thêm tính năng
+      // 0b00000001
+      // 0b00000010
+      // 0b00000100
+      // 0b00000111
+      enableFeature(&options, GENDER | TSHIRT | HAT | FEATURE1);
+
+      // Xóa tính năng
+      disableFeature(&options, HAT | GENDER);
+
+      // Liệt kê các tính năng đã chọn
+      listSelectedFeatures(options);
+    
+      return 0;
+  }
+```
+#### Bit field
+
+> Được sử dụng trong struct, dùng để quy định số bit cụ thể để sử dụng.
+
+_VD4: Quản lý thông tin cho 1 chiếc xe gồm: màu sắc, năng lượng, động cơ và thông tin bổ sung._
+
+```c
+  // Thông tin mang nhiều giá trị cần nhiều bit tương ứng
+  #define COLOR_RED   0 // 0b0000 0000
+  #define COLOR_BLUE  1 // 0b0000 0001
+  #define COLOR_BLACK 2 // 0b0000 0010
+  #define COLOR_WHITE 3 // 0b0000 0011
+
+  #define POWER_100HP 0
+  #define POWER_150HP 1
+  #define POWER_200HP 2
+
+  #define ENGINE_1_5L 0
+  #define ENGINE_2_0L 1
+
+  typedef uint8_t CarColor; // typedef là từ khóa định nghĩa lại biến
+  typedef uint8_t CarPower;
+  typedef uint8_t CarEngine;
+
+  // Các thông tin bổ sung, cần 2 bit lưu trữ 
+  #define SUNROOF_MASK        1 << 0  // 0001 
+  #define PREMIUM_AUDIO_MASK  1 << 1  // 0010
+  #define SPORTS_PACKAGE_MASK 1 << 2  // 0100
+
+  // Để quản lý cùng lúc nhiều thông tin, phải dùng struct để gom tất cả thông tin
+  typedef struct
+  {   
+      /******************************************************************
+       * bit-field: quy định số bit cụ thể để sử dụng
+       * VD:
+       * `Carcolor color : 2` sử dụng 2 bit trong tổng số 8 bit khai báo(uint8_t)
+       * `Carpower power : 3` sử dụng 3 bit trong tổng sổ 8 bit(uint8_t)
+       * `CarEngine engine;` chiếm 1 byte kích thước
+       *****************************************************************/
+
+      CarColor color : 2;            // 2 bit cho màu sắc 
+      CarPower power : 2;            // 2 bit cho năng lượng
+      CarEngine engine : 1;          // 1 bit cho động cơ 
+      uint8_t additionalOptions : 3; // 3 bit  cho các tùy chọn bổ sung
+  } CarOptions; // struct tên là CarOptions
+
+```
 
 </details>
 
