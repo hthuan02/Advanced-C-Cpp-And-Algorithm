@@ -769,7 +769,9 @@ _VD4: Quản lý thông tin cho 1 chiếc xe gồm: màu sắc, năng lượng, 
 <details>
   <summary><h3>Bài 4: Pointer</h3></summary>
 
-# A. Phần 1
+
+<details>
+  <summary><h3>A. Thao tác với con trỏ</h3></summary>
 
 > Con trỏ là 1 biến, không dùng lưu giá trị mà nó dùng để lưu địa chỉ của 1 đối tượng(biến, hàm, mảng,...)
 
@@ -786,31 +788,34 @@ _Sự khác nhau biến & con trỏ:_
 
 - **Khai báo con trỏ**
 ```c
-  int *ptr_int;       // con trỏ đến kiểu int
-  char *ptr_char;     // con trỏ đến kiểu char
-  float *ptr_float;   // con trỏ đến kiểu float
+  int *ptr;      // con trỏ đến kiểu int
+  char *ptr;     // con trỏ đến kiểu char
+  float *ptr;   // con trỏ đến kiểu float
 ```
 
 - **Lấy địa chỉ của biến**
 ```c
   int x = 10;
-  int *ptr_x = &x;  // ptr_x chứa địa chỉ của x
+  int *ptr = &x;  // ptr_x chứa địa chỉ của x
 ```
 - **Truy cập giá trị (giải tham chiếu - dereference)**
 ```c
-  int y = *ptr_x    // y sẽ bằng giá trị của x
-  ptr_x = &x;
-  *ptr_x = *(0x01) = 10;
+  int y = *ptr    // y sẽ bằng giá trị của x
+  ptr = &x;
+  *ptr = *(0x01) = 10;
 ```
 
-## 1. Kích thước của Con trỏ
+## 1. Kích thước của con trỏ
+
 - Phụ thuộc vào kiến trúc của máy tinh và trình biên dịch.
-_VD:_ Laptop 64bit --> 8byte
+
+_VD:_ Laptop 64bit -> 8byte
 
 - Trên MCU phụ thuộc vào kiến thúc vi xử lý.
-_VD:_  STM32/32bit --> 4byte
 
-       STM8/8bit   --> 1byte
+_VD:_ STM32(32bit) -> 4byte
+
+      STM8(8bit)   -> 1byte
 
 ```c
   #include <stdio.h>
@@ -830,7 +835,6 @@ _VD:_  STM32/32bit --> 4byte
 >
 > Kiểu dữ liệu khai báo biến và kiểu dữ liệu con trỏ phải đồng bộ với nhau.
 
-_VD: (Lấy ở đầu bài)_
 ```c
   int var = 10;
   int *ptr = &var;
@@ -838,7 +842,7 @@ _VD: (Lấy ở đầu bài)_
 
 ## 3. Array Pointer(Con trỏ với mảng)
 
-> Vùng nhớ câp phát cho mảng(kích thước của mảng) phụ thuộc vào (số lượng phần tử) * (kiểu dữ liệu).
+> Vùng nhớ câp phát cho mảng (kích thước của mảng) phụ thuộc vào (số lượng phần tử) * (kiểu dữ liệu).
 
 _VD:_
 ```c
@@ -866,18 +870,100 @@ _VD:_
 ```
 ## 4. Ứng dụng con trỏ
 
-_VD: Hoán đổi swap(a,b)_
-
-
-# B. Phần 2
-
-## 4. Void Pointer
-> Là 1 biến, có thể trỏ đến bất kỳ địa chỉ có kiểu dữ liệu nào cũng được, nó không quan tâm các kiểu dữ liệu như (char, int, float, double,...).
-
-- Ưu điểm: Tại địa chỉ trỏ đến có thể đọc và thay đổi giá trị, với điều kiện phải ép kiểu con trỏ void.
+_VD: Hoán đổi giá tị a và b_
+ 
+- Nếu không sử dụng con trỏ (SAI)
 
 ```c
-  void * ptr; //Khai bao con tro Void
+  #include <stdio.h>
+
+  void swap(int a, int b) // 0xb0 = 10, 0xe5 = 20
+  {
+      int tmp = a; // tmp = 10
+      a = b;       // a = 20
+      b = tmp;     // b = 10
+  }
+
+  int main()
+  {
+    int a = 10, b = 20; // 0x01: 10; 0xa4: 20
+    swap(a, b);
+    printf("value a is: %d\n", a); 
+    printf("value b is: %d\n", b);
+    return 0;
+  }
+```
+- Hàm `swap()` không thể thay đổi giá trị `a` và `b`:
+
+  - Vì tham số `a` và `b` truyền vào `swap()` không phải là con trỏ, không lưu địa chỉ của giá trị gốc. Mà nó tự cấp phát 2 vùng địa chỉ mới.
+
+  - 2 vùng địa chỉ mới của `a` và `b` trong hàm `swap()` khác 2 vùng địa chỉ `a` và `b` trong hàm main (địa chỉ gốc). Nên việc thay đổi giá trị hàm `swap()` không ảnh hưởng đến địa chỉ gốc 
+  
+  -> `a` và `b` không thể thay đổi giá trị.
+
+- Để khắc phục thì truyền vào con trỏ trong hàm `swap()`
+
+```c
+  #include <stdio.h>
+
+  void swap(int *a, int *b) // 0x01 = 10, 0xa4 = 20
+  {
+      int tmp = *a; // tmp = 10
+      *a = *b;       // a = 20
+      *b = tmp;     // b = 10
+  }
+
+  int main()
+  {
+    int a = 10, b = 20; // 0x01: 10; 0xa4: 20
+    swap(&a, &b);
+    printf("value a is: %d\n", a); // 20
+    printf("value b is: %d\n", b); // 10
+    return 0;
+  }
+```
+- Chương trình hoàn chỉnh
+
+```c
+  #include <stdio.h>
+
+  void swap(int *a, int *b) // 0x01 = 10, 0xa4 = 20
+  {
+      int tmp = *a; // tmp = 10
+      *a = *b;       // a = 20
+      *b = tmp;     // b = 10
+  }
+
+  void input(int *a, int *b)
+  {   
+      // Truyền vào `a` không truyền `&a`
+      // Nếu truyền vào `&a` là đọc địa chỉ của con trỏ, không phải lấy địa chỉ con trỏ lưu bên trong
+      printf("Nhập a: "); scanf("%d", a); 
+      printf("Nhập b: "); scanf("%d", b);
+  }
+
+  int main()
+  {
+    int a = 10, b = 20; // 0x01: 10; 0xa4: 20
+    input(&a, &b);
+    swap(&a, &b);
+    printf("value a is: %d\n", a); // 20
+    printf("value b is: %d\n", b); // 10
+    return 0;
+  }
+```
+
+</details>
+
+<details>
+  <summary><h3> B. Phân loại con trỏ </h3></summary>
+
+## 1. Void Pointer
+
+> Là con trỏ có thể trỏ đến bất kỳ địa chỉ, mà không cần quan tâm đến kiểu dữ liệu nào tại địa chỉ đó.
+
+```c
+  void * ptr;
 ```
 - _VD1: Xuất giá trị kiểu int, char._
 
@@ -889,96 +975,214 @@ _VD: Hoán đổi swap(a,b)_
 
       int a = 10;
       ptr = &a;
+
+      // (int*): ép kiểu cho con trỏ `*ptr`
+      // *(int*)(ptr): giải tham chiếu
       printf("Dia chi: %p, Gia tri: %d\n", ptr, *(int*)(ptr));
+
+      double a = 5.5;
+      ptr = &a;
+      printf("Dia chi: %p, Gia tri: %f\n", ptr, *(double*)(ptr));
 
       char c = 'C';
       ptr = &c;
       printf("Dia chi: %p, Gia tri: %c\n", ptr, *(char*)(ptr));
+
+      char arr[] = "HELLLO";
+      ptr = arr;
+      printf("Dia chi: %p, Gia tri: %s\n", ptr, *(char*)(ptr));
   }
 ```
 
-## 5. Function Pointer
-> Là 1 biến, có thể trỏ đến địa chỉ của 1 hàm có kiểu dữ liệu cụ thể.
+#### Mảng con trỏ void
+
+- Thay vì khai báo từng con trỏ void thì gộp lại thành 1 mảng.
+#include <stdio.h>
+
+```c
+  int main(int argc, char const *argv[]){
+      int a = 10;
+      double b = 5.5;
+      char c = 'C';
+      char arr[] = "HELLLO"; // ký tự NULL ('\0') // báo hiệu kết 
+
+      // Khai báo mảng lưu trữ địa chỉ của các biến trên
+      // Mảng con trỏ void, từng phần tử của nó là địa chỉ của biến khác
+      void *ptr1[] = {&a, &b, &c, &arr};
+      printf("Dia chi: %p, Gia tri: %d\n", ptr1[0], *(int*)(ptr1[0]));
+      printf("Dia chi: %p, Gia tri: %f\n", ptr1[1], *(double*)(ptr1[1]));
+
+      return 0;
+  } 
+```
+
+**Ưu điểm con trỏ void:** 
+
+- Tối ưu bộ nhó RAM (Vì mỗi con trỏ cần khai báo mỗi kiểu dữ liệu, nhiều kiểu dữ liệu thì tốn nhiều bộ nhớ).
+
+- 1 con trỏ có thể trỏ tới tất cả các biến. 
+
+## 2. Function Pointer
+
+> Con trỏ hàm là 1 biến, có thể trỏ đến địa chỉ của 1 hàm có kiểu dữ liệu cụ thể.
 >
->Đây là biến giữ địa chỉ của hàm, mỗi thời điểm chỉ trỏ 1 hàm.
+> Là biến lưu địa chỉ của hàm, mỗi thời điểm chỉ trỏ 1 hàm.
 
 - Thông thường sử dụng theo 2 cách:
-    - Là tham số truyền vào của 1 hàm.
-    - Lưu trữ địa chỉ của 1 hàm. 
+
+  - Là tham số truyền vào của 1 hàm.
+
+  - Lưu trữ địa chỉ của 1 hàm. 
+
+Cú pháp:
 
 ```c
-   void (*func_ptr)(int, int);  // Khai bao con tro
+  <return_type> (*func_pointer)(<data_type_1>, <data_type_2>);
 ```
 
-- _VD2: Tổng, hiệu, tích, thương._
+_VD1.0:_
+```c
+  void funcA();
+
+  void (*ptr)();  // 2 tham số truyền vào(data_type) hoặc bỏ trống nếu k có
+  ptr = &funcA; //  hoặc không cần `&`
+```
+_VD1.1:_
+```c
+  int sum (int a, int b);
+  int (*ptr)(int, int);
+  ptr = sum;
+```
+
+#### 3 cách gọi hàm ra
 
 ```c
+  // Cách 1. funcA();
+  // Cách 2. ptr();
+  // Cách 3. (*ptr);
+```
+
+_VD2: Tính tổng, hiệu, tích, thương bằng con trỏ hàm với 3 cách._
+
+  ```c
   #include<stdio.h>
 
-  void tong(int a, int b){
-      printf("%d + %d = %d\n",a ,b, a + b); 
-  }
-  void hieu(int a, int b){
-      printf("%d - %d = %d\n",a ,b, a - b); 
-  }
-  void tich(int a, int b){
-      printf("%d * %d = %d\n",a ,b, a * b); 
-  }
-  void thuong(int a, int b){
-      printf("%d / %d = %d\n",a ,b, a / b);
-  }
+  void tong(int a, int b){ printf("Tổng: %d\n", a+b);}
 
-  int main(int argc, char *argv[]) {
-  int a = 10, b = 5;
+  void hieu(int a, int b){ printf("Hiệu: %d\n", a-b);}
+          
+  void tich(int a, int b){ printf("Tích: %d\n", a*b);}
 
-  //Khai bao mang con tro Ham
-  void (*cal[])(int, int) = {tong, hieu, tich, thuong};
-  for (int i = 0; i < 4; i++) {
-      cal[i](a, b);
+  void thuong(int a, int b){ printf("Hiệu: %f\n", (double)a/b);}
+
+  void tinhtoan(void(*pheptinh)(int, int), int a, int b){ pheptinh(a,b); }
+
+
+  int main(){
+      
+      // Cách 1: Khai báo con trỏ hàm như biến
+      // void (*ptr)(int, int);
+      
+      // ptr = tong;
+      // ptr(2,3);
+
+      // ptr = hieu;
+      // ptr(2,3);
+
+      // ptr = tich;
+      // ptr(2,3);
+
+      // ptr = thuong;
+      // ptr(2,3);
+
+      // Cách 2: Khai báo con trỏ hàm như 1 mảng
+      // void (*ptr1[])(int, int) = {tong, hieu, tich, thuong};
+      
+      // ptr1[0](2,3);
+      // ptr1[1](2,3);
+      // ptr1[2](2,3);
+      // ptr1[3](2,3);
+
+      // Cách 3: Khai báo con trỏ hàm như thâm số truyền vào 
+      tinhtoan(tong, 2, 3);
+      tinhtoan(hieu, 2, 3);
+      tinhtoan(tich, 2, 3);
+      tinhtoan(thuong, 2, 3);
+
+      return 0;
   }
 ```
 
-## 6. Pointer to Constant(Con trỏ hằng)
+**Ưu điểm:** Tính linh hoạt cao, thường dùng trong lập trình game các tác vụ di chuyển không có độ trễ.
 
-> Khi trỏ đến 1 địa chỉ, không thể thay đổi đc giá trị tại địa chỉ đó (chỉ có thể đọc và không thể thay đổi).
->
-> Có thể trỏ đến nhiều địa chỉ khác nhau.
+**Nhược điểm:** Sẽ chậm hơn so với gọi hàm trực tiếp, vì nó gọi trung gian qua con trỏ hàm.
+
+## 3. Pointer to Constant (Con trỏ hằng)
+
+> Là con trỏ có thể thay đổi địa chỉ mà nó trỏ đến, nhưng không thể thay đổi giá trị tại địa chỉ đó thông qua giải tham chiếu.
 
 ```c
-  int const *ptr_const;
-  const int *ptr_const;
+  // Có 2 cách để khai báo
+  <data_type> const *ptr_const;
+  const <data_type> *ptr_const;
 ```
 
 - _VD3:_
 ```c
-  #include<stdio.h>
+  #include <stdio.h>
 
-  int a = 10;
-  int b = 3; //Khai bao ptr_const cua b duoc.
-  const int *ptr_const = &a;
-
-  int main(int argc, char const *argv[])
+  int main()
   {
-    printf("%p\n", ptr_const);
-    printf("%d\n", *ptr_const); //ptr_const = 10
+      int value = 5;
+      int test = 8;
+      int const *ptr_const = &value;
 
-    // *ptr_const = 5;
-    // Dong nay sai, chi co the thay doi gia tri tai a.
-    // VD: a = 15 -> *ptr_const =
+      //*ptr_const = 7;    // wrong
+      //ptr_const = &test; // right
+    
+      printf("value: %d\n", *ptr_const);
 
-    a = 15;
-    printf("%p\n", ptr_const);
-    printf("%d\n", *ptr_const); //ptr_const = 15
+      value = 9;
+      printf("value: %d\n", *ptr_const);
+      return 0;
   }
 ```
-## 7. Constant Pointer(Hằng con trỏ)
+
+#### Ngoài lề:
+
+Một con trỏ trỏ đến địa chỉ của hằng số, nếu hằng số đó là:
+
+- Biến cục bộ (local-variables): Có thể thay đổi giá trị
+
+```c
+  #include <stdio.h>
+
+  int main()
+  {
+      const int value = 5;
+      int *ptr_const = &value;
+
+      printf("value: %d\n", *ptr_const); // 5
+
+      *ptr_const = 7; // giải tham chiếu
+      printf("value: %d\n", *ptr_const); // 7
+      return 0;
+  }
+```
+- Biến toàn cục (global-variables): Không thể thay đổi giá trị
+
+#### Ứng dụng:
+- Giữ lại dữ liệu trước đó, đảm bảo dữ liệu không bị thay đổi trong quá trình xử lý dữ liệu (struct, JSON, dữ liệu trong thanh ghi IDR)
+-> Đọc dữ liệu không được phép thay đổi.
+
+## 4. Constant Pointer (Hằng con trỏ) - 1:20
 
 > Tại địa chỉ trỏ đến không thể thay đổi được địa chỉ, còn giá trị có thể thay đổi được.
 >
 > Chỉ trỏ đến 1 địa chỉ cố đinh, khi đã trỏ đến 1 địa chỉ rồi thì không thể trỏ đến địa chỉ khác được nữa.
 
 ```c
-    int *const const_ptr = &value;
+  int *const const_ptr = &value;
 ```
 
 - _VD4:_
@@ -1010,7 +1214,7 @@ _VD: Hoán đổi swap(a,b)_
 | 2 |Chỉ có thể đọc, không thể thay đổi giá trị(giá trị chỉ được thay đổi tại biến)| Có thể thay đổi giá trị |
 
    
-## 8. NULL Pointer
+## 5. NULL Pointer
 >Con trỏ trống, không trỏ đến vùng nhớ nào.
 >
 >Khai báo nhưng chưa sử dụng liền.
@@ -1023,7 +1227,7 @@ _VD: Hoán đổi swap(a,b)_
   int *ptr = NULL;
 ```
    
-## 9. Pointer to Pointer(Con trỏ đến con trỏ)
+## 6. Pointer to Pointer(Con trỏ đến con trỏ)
 >Là con trỏ mà có thể trỏ đến địa chỉ của các con trỏ khác, có nhiều cấp độ con trỏ (con trỏ cấp 2, 3,...).
 
 ```c
@@ -1037,6 +1241,7 @@ _VD: Hoán đổi swap(a,b)_
 
 </details>
 
+</details>
 <details>
   <summary><h3>Bài 5: Storage Classes</h3></summary>
 

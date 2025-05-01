@@ -14,7 +14,7 @@ int main(){
     // ptr + i.sizeof(data_type)
     for (int i = 0; i < n; i++)
     {
-        printf("Địa chir = %p - Giá trị: %d\n", ptr+i, *(ptr+i));
+        printf("Địa chỉ = %p - Giá trị: %d\n", ptr+i, *(ptr+i));
     }
 
     return 0;
