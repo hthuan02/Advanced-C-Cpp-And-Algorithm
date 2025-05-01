@@ -771,7 +771,7 @@ _VD4: Quản lý thông tin cho 1 chiếc xe gồm: màu sắc, năng lượng, 
 
 
 <details>
-  <summary><h3>A. Thao tác với con trỏ</h3></summary>
+  <summary><h4>A. Thao tác với con trỏ</h4></summary>
 
 > Con trỏ là 1 biến, không dùng lưu giá trị mà nó dùng để lưu địa chỉ của 1 đối tượng(biến, hàm, mảng,...)
 
