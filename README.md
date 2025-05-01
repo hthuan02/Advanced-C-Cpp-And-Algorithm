@@ -771,7 +771,7 @@ _VD4: Quản lý thông tin cho 1 chiếc xe gồm: màu sắc, năng lượng, 
 
 
 <details>
-  <summary><h4>A. Thao tác với con trỏ</h4></summary>
+  <summary><h2>A. Thao tác với con trỏ</h2></summary>
 
 > Con trỏ là 1 biến, không dùng lưu giá trị mà nó dùng để lưu địa chỉ của 1 đối tượng(biến, hàm, mảng,...)
 
@@ -956,7 +956,7 @@ _VD: Hoán đổi giá tị a và b_
 </details>
 
 <details>
-  <summary><h3> B. Phân loại con trỏ </h3></summary>
+  <summary><h2> B. Phân loại con trỏ </h2></summary>
 
 ## 1. Void Pointer
 
@@ -1715,7 +1715,7 @@ int main(int argc, char const *argv[])
 
 
 <details>
-  <summary><h3> A. 5 Phân vùng nhớ</h3></summary>
+  <summary><h2> A. 5 Phân vùng nhớ</h2></summary>
 
 - Memory Layout: Là sự tổ chức và sắp xếp các vùng nhớ (chứa mã lệnh, biến, và dữ liệu) trong bộ nhớ RAM khi chương trình thực thi.  
 
@@ -1893,7 +1893,7 @@ _VD5:_
 </details>
 
 <details>
-  <summary><h3>B. Heap segment - Cấp phát động</h3></summary>
+  <summary><h2>B. Heap segment - Cấp phát động</h2></summary>
 
 > Khai báo thư viện `#include<stdlib.h>`
 >
