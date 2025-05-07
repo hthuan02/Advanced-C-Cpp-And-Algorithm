@@ -1118,8 +1118,11 @@ _VD2: Tính tổng, hiệu, tích, thương bằng con trỏ hàm với 3 cách.
 **Nhược điểm:** Sẽ chậm hơn so với gọi hàm trực tiếp, vì nó gọi trung gian qua con trỏ hàm.
 
 ## 3. Pointer to Constant (Con trỏ hằng)
+(Chỉ đọc - Không thể ghi)
 
 > Là con trỏ có thể thay đổi địa chỉ mà nó trỏ đến, nhưng không thể thay đổi giá trị tại địa chỉ đó thông qua giải tham chiếu.
+>
+> Có thể trỏ đến nhiều địa chỉ.
 
 ```c
   // Có 2 cách để khai báo
@@ -1137,9 +1140,9 @@ _VD2: Tính tổng, hiệu, tích, thương bằng con trỏ hàm với 3 cách.
       int test = 8;
       int const *ptr_const = &value;
 
-      //*ptr_const = 7;    // wrong
-      //ptr_const = &test; // right
-    
+      //*ptr_const = 7;    // wrong, k thể thay đổi giá trị bằng giải tham chiểu
+      //ptr_const = &test; // right, thay đổi địa chỉ trỏ đến
+      
       printf("value: %d\n", *ptr_const);
 
       value = 9;
@@ -1173,16 +1176,18 @@ Một con trỏ trỏ đến địa chỉ của hằng số, nếu hằng số �
 
 #### Ứng dụng:
 - Giữ lại dữ liệu trước đó, đảm bảo dữ liệu không bị thay đổi trong quá trình xử lý dữ liệu (struct, JSON, dữ liệu trong thanh ghi IDR)
+
 -> Đọc dữ liệu không được phép thay đổi.
 
-## 4. Constant Pointer (Hằng con trỏ) - 1:20
+## 4. Constant Pointer (Hằng con trỏ) 
+(Vừa đọc - Vừa ghi)
 
-> Tại địa chỉ trỏ đến không thể thay đổi được địa chỉ, còn giá trị có thể thay đổi được.
+> Là con trỏ mà tại địa chỉ trỏ đến không thể thay đổi được địa chỉ, chỉ thay đổi được giá trị.
 >
-> Chỉ trỏ đến 1 địa chỉ cố đinh, khi đã trỏ đến 1 địa chỉ rồi thì không thể trỏ đến địa chỉ khác được nữa.
+> Chỉ được trỏ đến 1 địa chỉ duy nhất.
 
 ```c
-  int *const const_ptr = &value;
+  int *const ptr = &value;
 ```
 
 - _VD4:_
@@ -1191,52 +1196,63 @@ Một con trỏ trỏ đến địa chỉ của hằng số, nếu hằng số �
   #include<stdio.h>
 
   int a = 10;
-  int b = 3; // Khong khai bao duoc const_ptr cua b!!!
-  int *const const_ptr = &a;
+  int b = 3;
+  int *const ptr = &a;
 
-  int main(int argc, char const *argv[])
+  int main()
   {
-      printf("%p\n", const_ptr);
-      printf("%d\n", *const_ptr); //ptr_const = 10
-  
-      *const_ptr = 15; // hay doi gia tri tai con tro luon.
-      printf("%p\n", ptr_const);
-      printf("%d\n", *ptr_const); //ptr_const = 15
+      printf("%p\n", ptr);
+      printf("%d\n", *ptr); // ptr_const = 10
+
+      *ptr = 15; // Thay đổi giá trị tại con trỏ
+      printf("%p\n", ptr);
+      printf("%d\n", *ptr); // ptr_const = 15
   }
 ```
+**Ứng dụng:**
+VD1: Hằng con trỏ
 
+- Thay đổi dữ liệu thanh ghi (IDR) mà dữ liệu thanh ghi (ODR) không bị thay đổi
 
-### Bảng so sánh Con Trỏ Hằng VS Hằng Con trỏ
+VD2: Kết hợp con trỏ hằng + hằng con trỏ
 
-| Khác nhau | Con trỏ hằng | Hằng con trỏ |
-| :---: | --- | ---: |
-| 1 |Có thể trỏ đến nhiều địa chỉ khác | Chỉ trỏ đến 1 địa chỉ duy nhất |
-| 2 |Chỉ có thể đọc, không thể thay đổi giá trị(giá trị chỉ được thay đổi tại biến)| Có thể thay đổi giá trị |
+```c
+  const int *const ptr_const = &value;
+  // con trỏ hằng: Không cho phép thay đổi dữ liệu
+  // hằng con trỏ: Không cho phep thay đổi địa chỉ
+  // `&value` là địa chỉ duy nhất trỏ đến
+```
+- Chỉ thao tác (ODR), mà không thể thay đổi dữ liệu và không thể trỏ đến địa chỉ khác ngoài (ODR)
 
-   
 ## 5. NULL Pointer
->Con trỏ trống, không trỏ đến vùng nhớ nào.
+
+> Là con trỏ không trỏ đến bất kỳ đối tượng hay vùng nhớ nào.
 >
->Khai báo nhưng chưa sử dụng liền.
+> Khai báo nhưng chưa sử dụng liền. 
 
 **Lưu ý:** 
-- Khi khai báo con trỏ mà chưa sử dụng thì dùng con trỏ NULL sẽ không bị **random** giá trị vào địa chỉ rác hoặc trùng lặp địa .
-- Khởi tạo và kết thúc phải gán NULL.
+
+- Khi khai báo con trỏ mà chưa sử dụng thì dùng con trỏ NULL sẽ không bị **random** giá trị vào địa chỉ rác hoặc trùng lặp địa.
+
+- Sử dụng trong 2 trường hợp, khởi tạo và kết thúc phải gán NULL.
 
 ```c
   int *ptr = NULL;
 ```
    
-## 6. Pointer to Pointer(Con trỏ đến con trỏ)
->Là con trỏ mà có thể trỏ đến địa chỉ của các con trỏ khác, có nhiều cấp độ con trỏ (con trỏ cấp 2, 3,...).
+## 6. Pointer to Pointer (Con trỏ đến con trỏ)
+
+> Là con trỏ lưu trữ địa chỉ của con trỏ khác, có nhiều cấp độ con trỏ (con trỏ cấp 2, 3,...).
 
 ```c
   int a = 10;
-  int *ptr = &a;
-  int **ptr = &ptr;
+  int *ptr = &a; // Con trỏ cấp 1
+  int **ptr = &ptr; // Con trỏ cấp 2
 ```
 **Lưu ý:** 
-- Được sử dụng trong kiểu dữ liệu Json, cấu trúc dữ liệu list.
+
+- Ứng dụng trong kiểu dữ liệu Json, cấu trúc dữ liệu linked list.
+
 - Đối với con trỏ cấp 2 là lưu địa chỉ của con trỏ cấp 1, chứ không phải lưu địa chỉ mà con trỏ đang trỏ đến.             
 
 </details>
@@ -2108,5 +2124,27 @@ _VD4:_
 | **Tràn bộ nhớ**           | Stack overflow khi dùng quá nhiều bộ nhớ (VD: Gọi hàm mà không có điều kiện dừng)                                 | Heap overflow khi không giải phóng hoặc cấp phát quá lớn(Vùng nhớ quá lớn so với Heap)         |
 
 </details>
+
+</details>
+
+
+
+
+<details>
+  <summary><h3>Bài 12: Algorithm</h3></summary>
+
+# A. Bubble Sort (Sắp xếp nổi bọt)
+
+> Là thuật toán hoán đổi các phần tử liền kề để đưa các phần tử lớn hơn về cuối dãy (phần tử nhỏ hơn thì ở đầu dãy)
+
+- Thuật toán gồm các bước:
+  
+  - B1: Duyệt qua danh sách từ đầu đến cuối.
+
+  - B2: So sánh hai phần tử liền kề, nếu phần tử trước lớn hơn phần tử sau, thì hoán đổi vị trí.
+  
+  - B3 Lặp lại quá trình cho đến khi không còn sự hoán đổi nào xảy ra (mảng đã được sắp xếp).
+
+
 
 </details>
