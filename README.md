@@ -2149,34 +2149,95 @@ _VD: Sắp xếp mảng 6 phần tử tăng dần_
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort1.png" alt="Memory Layout" width="400"/>
 
-B1: Duyệt qua danh sách 6 phần tử: (J: Phần tử đầu; J+1 phần tử liền kề phần tử đầu)
+Thực hiện:
 
-- **Lượt 1:** 
+**Lượt 1:** Tìm phần tử có giá trị lớn nhất hoán đổi ra vị trí cuối cùng (phần tử 5)
   
-  - Hoán đổi giữa 2 phần tử đầu `5` với `3` (Input)
+- Lần 1: Hoán đổi phần tử đầu 0 và phần tử liền kề 1, `5` với `3` 
 
   - `3` nhỏ hơn -> Hoán đổi ra đầu.
   
-  - `5` lớn hơn -> Hoán đổi ra sau. (Ouput)
+  - `5` lớn hơn -> Hoán đổi ra sau 
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort2.png" alt="Memory Layout" width="400"/>
+  - Output: `3, 5, 8, 6, 2, -3`
 
-- Tiêp
+- Lần 2: Hoán đổi 2 phần tử thứ 1 và phần tử liền kề thứ 2, `5` với `8` (giữ nguyên vì tăng dần)
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort3.png" alt="Memory Layout" width="400"/>
+  - Output: `3, 5, 8, 6, 2, -3`
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort4.png" alt="Memory Layout" width="400"/>
+- Lần 3: Hoán đổi phần từ thứ 2 và phần tử liền kề thứ 3, `8` với `6`
+
+  - `8` lớn hơn -> Hoán đổi ra sau
+
+  - `6` nhỏ hơn -> Hoán đổi ra trước
+
+  - Ouput: `3, 5, 6, 8, 2, -3`
+
+- Lần 4: Hoán đổi phần từ thứ 3 và phần tử liền kề thứ 4, `8` với `2`
+
+  - `8` lớn hơn -> Hoán đổi ra sau
+
+  - `2` nhỏ hơn -> Hoán đổi ra trước
+
+  - Ouput: `3, 5, 6, 2, 8, -3`
+
+- Lần 5: Hoán đổi phần từ thứ 4 và phần tử liền kề thứ 5, `8` với `-3`
+
+  - `8` lớn hơn -> Hoán đổi ra sau
+
+  - `-3` nhỏ hơn -> Hoán đổi ra trước
+
+  - Ouput: `3, 5, 6, 2, -3, 8`
+
+#### Phần tử cuối cùng có giá trị `8`, kết thúc lượt 1
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort5.png" alt="Memory Layout" width="400"/>
 
+
+**Lượt 2:** Tìm phần tử lớn thứ 2, thực hiện hoán đổi trước phần tử cuối cùng (phần tử 4)
+
+- Hoán đổi `3` với `5` giữ nguyên, vì tăng dần
+
+- Hoán đổi `5` với `6` giữ nguyên, vì tăng dần
+
+- Hoán đổi `6` với `2` -> Ouput: `3, 5, 2, 6, -3, 8`
+
+- Hoán đổi `6` với `-3` -> Ouput: `3, 5, 2, -3, 6, 8`
+
+#### Phần tử lớn thứ 2 là `6`, kết thúc lượt 2
+
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort6.png" alt="Memory Layout" width="400"/>
 
+**Lượt 3:** Tìm phần tử lớn thứ 3, hoán đổi trước phần tử (phần tử 3)
+
+- Hoán đổi `3` với `5` giữ nguyên, vì tăng dần
+
+- Hoán đổi `5` với `2` -> `3, 2, 5, -3, 6, 8`
+
+- Hoán đổi `5` với `-3` -> `3, 2, -3, 5, 6, 8`
+
+#### Phần tử lớn thứ 3 là `5`, kết thúc lượt 3
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort7.png" alt="Memory Layout" width="400"/>
 
+
+**Lượt 4:** Tìm phần tử lớn thứ 4, hoán đổi trước phần tử lớn thứ 3 (phần tử 2)
+
+- Hoán đổi `3` với `2` -> `2, 3, -3, 5, 6, 8` 
+
+- Hoán đổi `3` với `-3` -> `2, -3, 3, 5, 6, 8`
+
+#### Phần tử lớn thứ 4 là `3`, kết thúc lượt 4
+
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort8.png" alt="Memory Layout" width="400"/>
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort9.png" alt="Memory Layout" width="400"/>
 
+**Lượt 5:** Tìm phần tử lớn thứ 5, hoán đổi trước phần tử lớn thứ 4
+
+- Hoán đổi `2` với `-3` -> `-3, 2, -3, 5, 6, 8` 
+
+#### Phần tử lớn thứ 5 là `2`, kết thúc lượt 5
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort9.png" alt="Memory Layout" width="400"/>
 
 </details>
