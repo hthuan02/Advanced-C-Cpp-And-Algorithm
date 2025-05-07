@@ -2143,12 +2143,25 @@ _VD4:_
 
   - B2: So sánh hai phần tử liền kề, nếu phần tử trước lớn hơn phần tử sau, thì hoán đổi vị trí.
   
-  - B3 Lặp lại quá trình cho đến khi không còn sự hoán đổi nào xảy ra (mảng đã được sắp xếp).
+  - B3: Lặp lại quá trình cho đến khi không còn sự hoán đổi nào xảy ra (mảng đã được sắp xếp).
+
+_VD: Sắp xếp mảng 6 phần tử tăng dần_
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort1.png" alt="Memory Layout" width="400"/>
 
+B1: Duyệt qua danh sách 6 phần tử: (J: Phần tử đầu; J+1 phần tử liền kề phần tử đầu)
+
+- **Lượt 1:** 
+  
+  - Hoán đổi giữa 2 phần tử đầu `5` với `3` (Input)
+
+  - `3` nhỏ hơn -> Hoán đổi ra đầu.
+  
+  - `5` lớn hơn -> Hoán đổi ra sau. (Ouput)
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort2.png" alt="Memory Layout" width="400"/>
+
+- Tiêp
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort3.png" alt="Memory Layout" width="400"/>
 
@@ -2158,7 +2171,6 @@ _VD4:_
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort6.png" alt="Memory Layout" width="400"/>
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai3_Bitmask/img/bang%20chan%20tri.png" alt="Memory Layout" width="650"/>
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort7.png" alt="Memory Layout" width="400"/>
 
