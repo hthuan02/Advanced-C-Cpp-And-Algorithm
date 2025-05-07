@@ -2191,7 +2191,7 @@ Thực hiện:
 
 #### Phần tử cuối cùng có giá trị `8`, kết thúc lượt 1
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort5.png" alt="Memory Layout" width="400"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort5.png" alt="Memory Layout" width="500"/>
 
 
 **Lượt 2:** Tìm phần tử lớn thứ 2, thực hiện hoán đổi trước phần tử cuối cùng (phần tử 4)
@@ -2206,7 +2206,7 @@ Thực hiện:
 
 #### Phần tử lớn thứ 2 là `6`, kết thúc lượt 2
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort6.png" alt="Memory Layout" width="400"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort6.png" alt="Memory Layout" width="500"/>
 
 **Lượt 3:** Tìm phần tử lớn thứ 3, hoán đổi trước phần tử (phần tử 3)
 
@@ -2218,7 +2218,7 @@ Thực hiện:
 
 #### Phần tử lớn thứ 3 là `5`, kết thúc lượt 3
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort7.png" alt="Memory Layout" width="400"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort7.png" alt="Memory Layout" width="500"/>
 
 
 **Lượt 4:** Tìm phần tử lớn thứ 4, hoán đổi trước phần tử lớn thứ 3 (phần tử 2)
@@ -2229,7 +2229,7 @@ Thực hiện:
 
 #### Phần tử lớn thứ 4 là `3`, kết thúc lượt 4
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort8.png" alt="Memory Layout" width="400"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort8.png" alt="Memory Layout" width="500"/>
 
 
 **Lượt 5:** Tìm phần tử lớn thứ 5, hoán đổi trước phần tử lớn thứ 4
@@ -2238,6 +2238,6 @@ Thực hiện:
 
 #### Phần tử lớn thứ 5 là `2`, kết thúc lượt 5
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort9.png" alt="Memory Layout" width="400"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort9.png" alt="Memory Layout" width="500"/>
 
 </details>
