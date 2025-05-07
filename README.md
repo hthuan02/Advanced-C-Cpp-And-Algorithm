@@ -2192,7 +2192,7 @@ Thực hiện:
 
 #### Phần tử cuối cùng có giá trị `8`, kết thúc lượt 1
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Ba12_Algorithm/img/Bubble_Sort5.png" alt="Memory Layout" width="550"/>
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort5.png" alt="Memory Layout" width="550"/>
 
 
 ### Lượt 2: Tìm phần tử lớn thứ 2, thực hiện hoán đổi trước phần tử cuối (phần tử 4)
