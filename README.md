@@ -2134,7 +2134,7 @@ _VD4:_
   <summary><h3>Bài 12: Algorithm</h3></summary>
 
 <details>
-  <summary><h3>A. Bubble Sort (Sắp xếp nổi bọt)</h3></summary>
+  <summary><h2>A. Bubble Sort (Sắp xếp nổi bọt)</h2></summary>
 
 > Là thuật toán hoán đổi các phần tử liền kề để đưa các phần tử lớn hơn về cuối dãy (phần tử nhỏ hơn thì ở đầu dãy)
 
@@ -2152,7 +2152,7 @@ _VD: Sắp xếp mảng 6 phần tử tăng dần_
 
 Thực hiện:
 
-### Lượt 1: Tìm phần tử có giá trị lớn nhất hoán đổi ra vị trí cuối cùng (phần tử 5)
+## Lượt 1: Tìm phần tử có giá trị lớn nhất hoán đổi ra vị trí cuối cùng (phần tử 5)
   
 - Lần 1: Hoán đổi phần tử đầu 0 và phần tử liền kề 1, `5` với `3` 
 
@@ -2195,7 +2195,7 @@ Thực hiện:
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort5.png" alt="Memory Layout" width="550"/>
 
 
-### Lượt 2: Tìm phần tử lớn thứ 2, thực hiện hoán đổi trước phần tử cuối (phần tử 4)
+## Lượt 2: Tìm phần tử lớn thứ 2, thực hiện hoán đổi trước phần tử cuối (phần tử 4)
 
 - Hoán đổi `3` với `5` giữ nguyên, vì tăng dần
 
@@ -2209,7 +2209,7 @@ Thực hiện:
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort6.png" alt="Memory Layout" width="550"/>
 
-### Lượt 3: Tìm phần tử lớn thứ 3, hoán đổi trước phần tử thứ 4
+## Lượt 3: Tìm phần tử lớn thứ 3, hoán đổi trước phần tử thứ 4
 
 - Hoán đổi `3` với `5` giữ nguyên, vì tăng dần
 
@@ -2222,7 +2222,7 @@ Thực hiện:
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort7.png" alt="Memory Layout" width="550"/>
 
 
-### Lượt 4: Tìm phần tử lớn thứ 4, hoán đổi trước phần tử lớn thứ 3
+## Lượt 4: Tìm phần tử lớn thứ 4, hoán đổi trước phần tử lớn thứ 3
 
 - Hoán đổi `3` với `2` -> `2, 3, -3, 5, 6, 8` 
 
@@ -2233,7 +2233,7 @@ Thực hiện:
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort8.png" alt="Memory Layout" width="550"/>
 
 
-#### Lượt 5: Tìm phần tử lớn thứ 5, hoán đổi trước phần tử lớn thứ 2
+## Lượt 5: Tìm phần tử lớn thứ 5, hoán đổi trước phần tử lớn thứ 2
 
 - Hoán đổi `2` với `-3` -> `-3, 2, -3, 5, 6, 8` 
 
@@ -2241,8 +2241,80 @@ Thực hiện:
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort9.png" alt="Memory Layout" width="550"/>
 
+### Lưu ý:
+
+- Đầu lượt 1: j (phần tử 0), j + 1: (phần tử 1)
+
+- Kết thúc lượt 1: 
+
+```c
+  // i = 0;                   // 6 = 6-0 = size -0
+  // j = 0 đến 4 
+  //   = 0 đến ((size -0)-2)
+  //   = 0 đến (size - i - 2)
+  
+  // Kết thúc lượt 1 (5 lượt)  // 5 = 6-1 = size-1
+  // i = 1; 
+  // j = 0 đến 4  
+  //   = 0 đến ((size -1) -1))
+  //   = 0 đến (size -i -1) 
+
+  // Kết thúc lượt 2 (4 lượt)   // 4 = 6-2 = size-2
+  // i = 2;
+  // j = 0 đến 3 
+  //   = 0 đến ((size - 2) -1)
+  //   = 0 đến (size -i -1)
+
+  // Kết thúc lượt 3 ( lượt)   // 3 = 6-3 = size-3
+  // i = 2;
+  // j = 0 đến 2 
+  //   = 0 đến ((size - 3) -1)
+  //   = 0 đến (size -i -1)
+
+  // ...
+```
+## Tổng kết
+
+- `i = 0` 
+
+  - Số lượng: `size - 2`
+
+  - Số lần so sánh: `size - i - 2`, i là số lượt lặp 
+
+- `i = 1` 
+  
+  - `size - 1`
+
+  - `size - i - 1`
+```c
+  void bubbleSort(int arr[], int n)
+  {
+      // Duyệt qua từng phần tử 0 đến n-2
+      for (int i=0; i<=n-2; i++)
+      {
+          // Duyệt qua từng phần tử 0 đến n-i-2
+          for (int j=0; j<=n-i-2; j++)
+          {
+              // Mỗi lần sẽ so sánh từng cặp liền kề (j và j+1)
+              // Nếu j > j+1 thì hoán đổi vị trí j và j+1
+              if (arr[j] > arr[j+1])
+              {   
+                  // Thực hiện hoán đổi trực tiếp 
+                  // Hoặc tách ra hàm `swap()` rồi gọi ra
+                  int temp = arr[j];
+                  arr[j]   = arr[j+1];
+                  arr[j+1] = temp;
+              }
+          }
+      }  
+  }
+```
+</details>
+
+<details>
+  <summary><h3>B. Linear Search (Tìm kiếm tuyến tính)</h2></summary>
+
 
 
 </details>
-
 </details>

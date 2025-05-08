@@ -84,14 +84,23 @@ int compareByID(const void *a, const void *b)
 }
 
 // Hàm sắp xếp chung
+// i < size - 1 và i <= size -2
+// i = 6
+// TH1: i < 5: 0 1 2 ...4 (5 lượt)
+// TH2: i <=4: 0 1 2 ...4 (5 lượt)
 void sort(SinhVien array[], size_t size, int (*compareFunc)(const void *, const void *))
-{
-    for (int i=0; i<size-1; i++)
-    {
-        for (int j=0; j<size-i-1; j++)
+{   
+    // Duyệt từng phần từ
+    for (int i=0; i<size-1; i++) // Số lượt
+    {   
+        // Duyệt
+        for (int j=0; j<size-i-1; j++) // Số lần so sánh
         {
+            // So sánh từng cặp liền kề
+            // so sánh khi j > j+1
             if (compareFunc(array+j, array+j+1)>0)
-            {
+            {   
+                // Thực hiện hoán đổi swap()
                 SinhVien temp = array[j];
                 array[j] = array[j+1];
                 array[j+1] = temp;
