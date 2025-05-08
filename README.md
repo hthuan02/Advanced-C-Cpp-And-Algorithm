@@ -2122,12 +2122,105 @@ _VD4:_
 | **Kích thước**            | Cố định (nhỏ hơn)                                                        | Linh hoạt (lớn hơn)                                              |
 | **Thời điểm cấp phát**    | Lúc biên dịch.                                                            | Lúc chạy chương trình.                                            |
 | **Tràn bộ nhớ**           | Stack overflow khi dùng quá nhiều bộ nhớ (VD: Gọi hàm mà không có điều kiện dừng)                                 | Heap overflow khi không giải phóng hoặc cấp phát quá lớn(Vùng nhớ quá lớn so với Heap)         |
-
 </details>
 
 </details>
 
+<details>
+  <summary><h3>Bài 9: Stack - Queue</h3></summary> 
 
+## I. Stack
+(Last in - First Out) --> Ngăn xếp
+
+- Phần vào sau cùng thì lấy ra tước tiên và ngược lại.
+
+- Gồm 3 thao tác:
+
+      - push: Thêm phần tử vào ở đỉnh stack(top++)
+  
+      - pop: Xóa 1 phần tử đỉnh stack(top--)
+  
+      - top: giá trị phần tử của đỉnh (Maxtop = size -1)
+
+
+## II. Queue
+(First in - First out) --> Hàng đợi 
+
+- Phần tử vào đầu thì ra đầu, vào cuối thì ra cuối
+
+- Gổm 3 thao tác:
+
+      - enqueue: Thêm phần tử cuối hàng đợi (rear++)
+  
+      - dequeue: Lấy(loại bỏ) phần tử đầu hàng đợi (front++)
+
+      - front: Lấy giá trị phẩn tử đầu hàng đợi
+
+      - rear: Lấy giá trị phần tủ cuối hàng đợi
+
+Ngoài ra, nếu rỗng:
+
+- Max_front = Max_rear = size -1 
+
+- enqueue = -1
+
+- dequeue = -1
+
+### 1. Linear Queue (hàng đợi tuyến tính)
+
+> Các phần tử được sắp xếp theo thứ tự tuyến tính, tức là mỗi phần tử đứng sau phần tử khác trong một hàng dọc.
+
+### 2. Circular Queue (hàng đợi vòng tròn)
+
+> Phần tử cuối cùng của hàng đợi được kết nối với phần tử đầu tiên, tạo thành một vòng tròn.
+
+</details>
+
+<details>
+  <summary><h3>Bài 10: Liked list</h3></summary> 
+
+- Liked list (danh sách liên kết): Là cấu trúc dữ liệu gồm chuổi các node(nút) liên kết với nhau, mỗi node gồm 2 thành phần: Data và con trỏ (*Next).
+
+  _VD0:_ Cho mảng `int array[] = {2,7,4,5,3};`
+
+- Dùng Malloc:
+  
+        // Malloc(); //Lưu trữ 5 phần tử * sizeof(int)= (20byte)
+
+        // Free():
+
+        // Thêm - Thu hồi phần tử bằng cách thủ công, nhưng đối với array[10000] thì không thể làm thủ công được.
+
+  ➡️➡️➡️➡️➡️
+- Liked list: Tạo 5 node
+
+    <img src="https://github.com/hthuan02/C_Cpp_Advance/blob/main/C_Advance/Bai10_Linked-List/liked_list.png" alt="Memory Layout" width="800"/>
+
+    - Trong danh sách liên kết này có thể thêm hoặc thu hồi tùy ý các phần tử.
+ 
+    - Liked LIST còn có thể sử dụng ở quy mô lớn hơn như array[10000].
+ 
+    - Các hàm sử dụng của danh sách dữ liệu LIST:
+
+    ```
+        node *createNode(int value); //Tạo 1 node mới, có giá trị value và trả về con trỏ node
+        void push_back(node** array, int value); //Thêm 1 node mới có giá trị value vào cuối danh sách 
+        void push_front(node **array, int value); //Thêm 1 node có giá trị value đầu danh sách
+        void pop_back(node **array); //Xóa node cuối danh sách 
+        void pop_front(node **array); //Xóa node đầu danh sách 
+        int front(node *array); //Lấy giá trị của node đầu tiên
+        int back(node *array); //Lấy giá trị của node cuối cùng
+        void insert(node **array, int value, int pos); //Thêm 1 node vào một vị trí bất kỳ(int pos là vị trí)
+        void delete_list(node **array, int pos); //Xóa 1 node ở vị trí bất kỳ
+        int size(node *array); //Lấy kích thước node của danh sách
+        int get(node *array, int pos); //Lấy giá trị của node(tại pos) của danh sách
+
+        bool empty(node *array); // kiem tra list co rong hay khong
+        //Không có hàm kiểm tra đầy, vì nó k quan tâm đến số lượng
+    ```
+    **Ứng dụng: Liked List giúp quản lý danh sách tốt hơn mảng.**
+  
+</details>
 
 
 <details>
@@ -2312,9 +2405,326 @@ Thực hiện:
 </details>
 
 <details>
-  <summary><h3>B. Linear Search (Tìm kiếm tuyến tính)</h2></summary>
+  <summary><h2>B. Linear Search (Tìm kiếm tuyến tính)</h2></summary>
 
 
 
 </details>
+
+<details>
+  <summary><h2>C. Binary Search (Tìm kiếm nhị phân)</h2></summary>
+
+## 1. Binary Search
+(Thuật toán tìm kiếm nhị phân)
+
+_VD:_
+
+```c
+    int arr[]= {13,11,15,30,18,16,21,25,20}
+```
+**Tìm ID: 25** (Dùng thuật toán tìm kiếm tuyến tính-LinearSearch)
+
+- Tìm ID duyệt từng phần tử
+
+- So sánh từng phần tử với số 25
+
+**Nhược điểm:** Đối với mảng lớn thì số lần lặp lại tìm kiếm nhiều lần: tốn bộ nhớ, tốn thời gian. 
+
+  ===>>>Để khắc phục thì dùng Binary Search
+
 </details>
+
+</details>
+
+
+# Phần II: C++
+---
+<details>
+  <summary><h3>Bài 15: Class</h3></summary>
+
+## 1. Định nghĩa
+Kiểu dữ liệu người dùng tự định nghĩa (tương tự struct & union).
+
+```cpp
+    class SinhVien{
+
+    };
+```
+
+- không khai báo typedef cho class
+ 
+## 2. Phạm vi truy cập
+
+- Phục vụ tính chất hướng đối tượng(biến, hàm, mảng)
+- Private  ->> Tính đóng gói
+- Protected ->> Tính kế thừa
+- Public ->> tính trừu tượng 
+
+### 2.1 Class public
+
+Phạm vi Public: Khi khai báo 1 object từ bên ngoài thì có thể tự do truy cập, thay đổi và đọc những thành phần bên trong phạm vi public (property, method).
+
+Có 2 cách khai báo method(hàm)
+
+- Cách 1: Khai báo method và nội dung của method trong Class
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+// Bên trong class không gọi là biến, hàm, mảng
+class HinhChuNhat
+{
+public:
+    double chieuDai;  // property: thuộc tính (biến/mảng)
+    double chieuRong; // property: thuộc tính
+    void DienTich()
+    { 
+        // method: phương thức (hàm)
+        cout << "Dien tich = " << chieuDai * chieuRong;
+    }
+};
+
+int main(int argc, char const *argv[])
+{
+    HinhChuNhat hcn; // object: đối tượng(hcn là đối tượng thuộc class HinhChuNhat)
+    hcn.chieuDai = 10;
+    hcn.chieuRong = 20;
+    hcn.DienTich();
+    return 0;
+}
+```
+
+- Cách 2: Khai báo method trong Class, nội dung để ở ngoài.
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+// Bên trong class không gọi là biến, hàm, mảng
+class HinhChuNhat
+{
+public:
+    double chieuDai;  // property
+    double chieuRong; // property
+    void DienTich(); // method
+};
+
+void HinhChuNhat::DienTich() // :: là toán tử truy cập 
+{
+    cout << "Dien tich = " << chieuDai * chieuRong << endl;
+}
+
+int main(int argc, char const *argv[])
+{
+    HinhChuNhat.hcn; // object
+    hcn.chieuDai = 10;
+    hcn.chieuRong = 20;
+    hcn.DienTich();
+    return 0;
+}
+```
+
+#### Lưu ý: 
+- Tương tự với struct & union, biến thì có địa chỉ. Khi khai báo 1 object thì Complier sẽ cấp địa chỉ để lưu những thành phần bên trong nó 
+
+```cpp
+int main(int argc, char const *argv[])
+{
+    HinhChuNhat.hcn; // object // 0xc0
+    hcn.chieuDai = 10;
+    hcn.chieuRong = 20;
+    hcn.DienTich();
+    return 0;
+}
+```
+
+- Sau đó, object vào bên trong Class cấp địa chỉ cho các property, từ property đầu tiên. 
+
+```c
+class HinhChuNhat
+{
+public:
+    double chieuDai;  // property // 0xc0 - 0xc7: 8byte
+    double chieuRong; // property // 0xc8 - 0xcf
+    void DienTich(); // method
+};
+```
+
+### 2.2 Constructor
+(Trong class có 1 method đặc biệt là Constructor, giúp khởi tạo giá trị cho property từ trong Class)
+
+> Là method trùng tên với tên class.
+>
+> Được khai báo trong 3 phạm vi (public, private, protected).
+>
+> **Tự động khởi chạy** khi khai báo 1 object: Có 4 cách khai báo constructor.
+
+- Cách 1: Truy cập vào property từ bên ngoài.
+
+```cpp
+int main(int argc, char const *argv[])
+{
+    HinhChuNhat.hcn; // object  
+    hcn.chieuDai = 10;
+    hcn.chieuRong = 20;
+    hcn.DienTich();
+    return 0;
+}
+```
+- Cách 2,3,4 Contructor
+
+```cpp
+    class HinhChuNhat{
+        public:
+            double chieuDai; 
+            double chieuRong; 
+            void DienTich();
+
+            //Cách 2: Constructor không có tham số truyền vào
+            // HinhChuNhat(){
+            //     chieuDai = 20;
+            //     chieuRong = 30;
+            // }
+
+            //Cách 3: Constructor có tham số truyền vào, không có tham số mặc định
+            // HinhChuNhat(int dai, int rong){
+            //     chieuDai = dai;
+            //     chieuRong = rong;
+            // }
+
+           // Cách 4: Viết kiểu khác của cách 3, có tham số mặc định 
+           HinhChuNhat(int dai = 5, int rong = 10): chieuDai(dai), chieuRong(rong){
+                DienTich();
+           }
+    }; 
+
+    void HinhChuNhat::Dientich(){
+        cout << "Dien tich = " << chieuDai * chieuRong <<endl;
+    }
+
+    int main()
+    {
+        HinhChuNhat hcn(15,10); // object //150
+        HinhCHuNhat hcn1; // Ghi đè lên 150, là 50
+        // hcn.chieuDai = 10;
+        // hcn.chieuRong = 20;  
+        // hcn.DienTich();
+        return 0;
+    }
+```
+### 2.3 Destructor
+
+> Cùng là method có tên trùng với tên Class, nhưng có thêm dấu `~` ở trước.
+>
+> Có thể nằm ở bất kỳ phạm vi nào (public, private, protected).
+>
+> Tự động khởi chạy khi tạo ra 1 object.
+
+- Chạy Constructor trước, Destructor thực hiện cuối sau khi thực hiện các thao tác khác xong hết.
+
+- Thu hồi lại object.
+
+**Ứng dụng**:
+
+- Cấp phát động cho 1 con trỏ.
+
+- Khi sử dụng xong con trỏ, thay vì gán NULL. Mình có thể tự động thu hồi vùng nhớ bằng hàm Destructor.
+
+_VD: Cách thức hoạt động của Constructor vs Destructor_
+
+->> Hoạt động theo kiểu Stack(Last In-First Out)
+
+### 2.4 Static trong Class
+
+#### Static property
+
+```cpp
+
+
+#include <iostream>
+
+using namespace std;
+
+class HinhChuNhat
+{
+public:
+    double chieuDai;  // property // 0xc0 - 0c7  object1 // 0x00 - 0x07   object2
+    double chieuRong; // property // 0xc8 - 0xcf         // 0x08 - 0x0f
+    // int var;       // property // 0xd0 - 0xd3         // 0x10 - 0x13
+
+    /* Static
+     * - Địa chỉ của biến static sẽ tồn tại xuyên suốt chương trình.
+     * - Để sử dụng thì phải cấp phát địa chỉ thông qua truy cập từ class.
+     * - Tất cả object khác vùng địa chỉ sẽ được sử dụng chung biến var.
+     */
+    static int var; // property // 0xa0 - 0xa3 (chung cho cả 2object)
+};
+
+int HinhChuNhat::var; // Truy cập từ trong class, không cần object. Để cấp phát địa chỉ dùng chung biến var
+
+int main(int argc, char const *argv[])
+{
+    HinhChuNhat hcn1;
+    HinhChuNhat hcn2;
+
+    cout << "Address of var: " << &hcn1.var << endl; // &: C++ là tham chiếu
+    cout << "Address of var: " << &hcn2.var << endl;
+    return 0;
+}
+```
+
+#### Static method
+
+- Giống với static property, đều thuộc chung class -> Không cần khai báo object để gọi nó ra. Gọi trực tiếp bằng tên của Class.
+
+- Static method chỉ gọi ra được property đi kèm với Static, không thể gọi property khác.
+
+
+```cpp
+
+#include <iostream>
+
+using namespace std;
+
+class HinhChuNhat
+{
+public:
+    double chieuDai;  // property // 0xc0 - 0c7     // 0x00 - 0x07   object2
+    double chieuRong; // property // 0xc8 - 0xcf    // 0x08 - 0x0f
+    static int var;   // property // 0xa0 - 0xa3
+
+    static void display()
+    {
+        cout << "This is static method" << endl;
+        var = 20;
+    }
+};
+
+int HinhChuNhat::var;
+
+int main(int argc, char const *argv[])
+{
+    HinhChuNhat hcn1;
+    HinhChuNhat hcn2;
+
+    HinhChuNhat::display();
+    return 0;
+}
+```
+
+#### Lưu ý:
+
+- Cả 2 đều truy cập từ trong Class, không cần truy cập object.
+
+- **static property**: Truy cập vào bên trong  Class, để cấp phát địa chỉ tồn tại xuyên suốt chương trình. Tất cả object khai báo ra sẽ dùng chung địa chỉ này.
+
+- **static method**: Chỉ làm việc được với static property.
+
+
+</details>
+
+
+
