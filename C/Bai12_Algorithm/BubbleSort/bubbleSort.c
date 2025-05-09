@@ -19,7 +19,7 @@ void bubbleSort(int arr[], int n)
         {
             // Mỗi lần sẽ so sánh từng cặp liền kề (j và j+1)
             // Nếu j > j+1 thì hoán đổi vị trí j và j+1
-            if (arr[j] > arr[j+1])
+            if (arr[j] > arr[j+1]) // Tăng dần, nếu giảm dần thì <
             {   
                 // Thực hiện hoán đổi trực tiếp 
                 // Hoặc tách ra hàm `swap()` rồi gọi ra

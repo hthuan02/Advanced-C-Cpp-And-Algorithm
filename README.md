@@ -2407,30 +2407,46 @@ Thực hiện:
 <details>
   <summary><h2>B. Linear Search (Tìm kiếm tuyến tính)</h2></summary>
 
+> Là thuật toán dùng để tìm 1 phần tử trong mảng
 
+Thuật toán gồm các bước:
 
+- B1: Duyệt từng phần tử trong mảng từ trái sang phải.
+
+- B2: Mỗi phần tử duyệt đến, thực hiện so sánh với giá trị cần tìm.
+
+- B3: Nếu duyệt hết mảng mà không tìm thấy, trả về kết quả không tồn tại.
+
+#### Nhược điểm lớn:
+Nếu dữ liệu lớn (10000 phần tử) thì tốc độ thực sẽ rất chậm đến (20000 bước), vừa duyệt vừa so sánh. Nên thuật toán này không tối ưu.
 </details>
 
 <details>
   <summary><h2>C. Binary Search (Tìm kiếm nhị phân)</h2></summary>
 
 ## 1. Binary Search
-(Thuật toán tìm kiếm nhị phân)
+
+> Là thuật toán tìm kiếm hoạt động bằng cách chia đôi dữ liệu để tìm, thay vì duyệt tuần tự như Linear Search.
+
+Thuật toán gồm các bước:
+
+- B1: Sắp xếp mảng (tăng dần hoặc giảm dần).
+
+- B2: Đánh dấu vị trí bắt đầu (left) và vị trí kết thúc (right) để chia đôi mảng. Tìm vị trí giữa (mid = (left + right)/2), lấy mid so sánh với các giá trị của mảng
+  
+  - Nếu trùng 		→ Trả về vị trí.
+
+  - Nếu giá trị cần tìm > mid 	→ Tiếp tục tìm trong nửa phải.
+
+  - Nếu giá trị cần tìm <> mid  	→ Tiếp tục tìm trong nửa trái.
+
+- B3: Lặp lại bước 2 cho đến khi tìm thấy phần tử hoặc không còn phần tử nào để tìm.
 
 _VD:_
 
-```c
-    int arr[]= {13,11,15,30,18,16,21,25,20}
-```
-**Tìm ID: 25** (Dùng thuật toán tìm kiếm tuyến tính-LinearSearch)
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch.png" alt="Memory Layout" width="550"/>
 
-- Tìm ID duyệt từng phần tử
 
-- So sánh từng phần tử với số 25
-
-**Nhược điểm:** Đối với mảng lớn thì số lần lặp lại tìm kiếm nhiều lần: tốn bộ nhớ, tốn thời gian. 
-
-  ===>>>Để khắc phục thì dùng Binary Search
 
 </details>
 
