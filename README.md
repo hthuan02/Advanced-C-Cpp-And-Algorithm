@@ -2243,9 +2243,9 @@ _VD: Sắp xếp mảng 6 phần tử tăng dần_
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort1.png" alt="Memory Layout" width="400"/>
 
-Thực hiện:
+**Thực hiện:**
 
-## Lượt 1: Tìm phần tử có giá trị lớn nhất hoán đổi ra vị trí cuối cùng (phần tử 5)
+### Lượt 1: Tìm phần tử có giá trị lớn nhất hoán đổi ra vị trí cuối cùng (phần tử 5)
   
 - Lần 1: Hoán đổi phần tử đầu 0 và phần tử liền kề 1, `5` với `3` 
 
@@ -2288,7 +2288,7 @@ Thực hiện:
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort5.png" alt="Memory Layout" width="550"/>
 
 
-## Lượt 2: Tìm phần tử lớn thứ 2, thực hiện hoán đổi trước phần tử cuối (phần tử 4)
+### Lượt 2: Tìm phần tử lớn thứ 2, thực hiện hoán đổi trước phần tử cuối (phần tử 4)
 
 - Hoán đổi `3` với `5` giữ nguyên, vì tăng dần
 
@@ -2302,7 +2302,7 @@ Thực hiện:
 
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort6.png" alt="Memory Layout" width="550"/>
 
-## Lượt 3: Tìm phần tử lớn thứ 3, hoán đổi trước phần tử thứ 4
+### Lượt 3: Tìm phần tử lớn thứ 3, hoán đổi trước phần tử thứ 4
 
 - Hoán đổi `3` với `5` giữ nguyên, vì tăng dần
 
@@ -2315,7 +2315,7 @@ Thực hiện:
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort7.png" alt="Memory Layout" width="550"/>
 
 
-## Lượt 4: Tìm phần tử lớn thứ 4, hoán đổi trước phần tử lớn thứ 3
+### Lượt 4: Tìm phần tử lớn thứ 4, hoán đổi trước phần tử lớn thứ 3
 
 - Hoán đổi `3` với `2` -> `2, 3, -3, 5, 6, 8` 
 
@@ -2326,7 +2326,7 @@ Thực hiện:
 <img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/Bubble_Sort8.png" alt="Memory Layout" width="550"/>
 
 
-## Lượt 5: Tìm phần tử lớn thứ 5, hoán đổi trước phần tử lớn thứ 2
+### Lượt 5: Tìm phần tử lớn thứ 5, hoán đổi trước phần tử lớn thứ 2
 
 - Hoán đổi `2` với `-3` -> `-3, 2, -3, 5, 6, 8` 
 
@@ -2434,19 +2434,128 @@ Thuật toán gồm các bước:
 
 - B2: Đánh dấu vị trí bắt đầu (left) và vị trí kết thúc (right) để chia đôi mảng. Tìm vị trí giữa (mid = (left + right)/2), lấy mid so sánh với các giá trị của mảng
   
-  - Nếu trùng 		→ Trả về vị trí.
+  - Nếu trùng 	              	→ Trả về vị trí.
 
-  - Nếu giá trị cần tìm > mid 	→ Tiếp tục tìm trong nửa phải.
+  - Nếu mid > giá trị cần tìm  	→ Tìm trong nửa trái.
 
-  - Nếu giá trị cần tìm <> mid  	→ Tiếp tục tìm trong nửa trái.
+  - Nếu mid < giá trị cần tìm  	→ Tìm trong nửa phải.
 
 - B3: Lặp lại bước 2 cho đến khi tìm thấy phần tử hoặc không còn phần tử nào để tìm.
 
-_VD:_
 
-<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch.png" alt="Memory Layout" width="550"/>
+<details>
+  <summary><h4>VD1. Tìm kiếm nửa bên phải</h4></summary>
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch.png" alt="Memory Layout" width="600"/>
+
+**Thực hiện:**
+
+- B1: Sắp xếp mảng tăng dần
+
+- B2: Đánh dấu `left`, `right`, và tìm `mid` bằng trung bình cộng, mid = (0+8)/2 = 4. `mid` ở vị trí thứ 4
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch1.png" alt="Memory Layout" width="600"/>
+
+  - So sánh `mid = 18` < `ID = 27`-> Tiếp tục tìm kiếm trong nửa phải (từ phần từ thứ 5 đến thứ 8).
+
+- B3: 
+
+Lặp lại 1, đánh dấu `left`, `right`, mid = (5+8)/2 = 6.5 = 6. `mid` ở trị trí 6
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch2.png" alt="Memory Layout" width="600"/>
+
+  - So sánh `mid = 21` < `ID = 27` -> Tiếp tục tìm kiếm trong nửa phải (phần tử thứ 7 và phần tử thứ 8)
 
 
+Lặp lại 2, đánh dấu `left`, `right`, mid = (7+8)/2 = 7.5 = 7. `mid = left` phần tử 7
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch3.png" alt="Memory Layout" width="600"/>
+
+  - So sánh `mid = 25` < `ID = 27`. Tiếp tục tìm kiếm nửa phải 
+
+Lặp lại 3, `left = right = mid` ở phần tử 8
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch4.png" alt="Memory Layout" width="600"/>
+
+  - So sánh `mid = left = right = 30` > `ID = 27`. Duyệt bên trái, nhưng bên trái đã duyệt qua hết rồi
+
+  => Không tìm thấy phần tử `27` trong mảng. Nhưng máy tính không hiểu được. Phải cập nhật lại chỉ số `right` sao cho:
+
+  - `right = mid-1`
+  
+  - `right < left`: Kết thúc tìm kiếm.
+
+</details>
+
+<details>
+  <summary><h4>VD2. Tìm kiếm nửa bên trái</h4></summary>
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch5.png" alt="Memory Layout" width="600"/>
+
+**Thực hiện**
+
+- B1: Sắp xếp tăng dần
+
+- B2: Đánh dấu `left`, `right`. `mid`= 4
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch6.png" alt="Memory Layout" width="600"/>
+
+  -  So sánh `mid = 18` > `ID = 14`. Tìm kiếm nửa bên trái
+
+- B3: 
+
+Lặp lại, đánh dấu `left`, `right`. `mid` = 1.5 = 1 
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch7.png" alt="Memory Layout" width="600"/>
+
+  - So sánh `mid = 13` < `ID = 14`. Tìm kiếm nửa bên phải, để cập nhật lại `left` và `right` sao cho `right`< `left` để kết thúc.
+
+Lặp lại, đặt `left`, `right`,`mid` = 2.5 =2 -> `left = mid`
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch8.png" alt="Memory Layout" width="600"/>
+
+  - So sánh `mid = left = 15` > `ID = 14`. Bên phải đã duyệt rồi, cập nhật lại `right`
+
+  - `rigt = mid - 1`
+  
+  - `right` < `left`. Kết thúc tìm kiếm.
+
+</details>
+
+### Ưu điểm:
+Thực hiện tìm kiếm nhanh hơn rất nhiều so với Linear Search. Với mảng 10 000 phần tử có thể tìm kiếm tối đa trong 14 bước
+
+<img src="https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai12_Algorithm/img/BinarySearch9.png" alt="Memory Layout" width="600"/>
+
+```c
+  #define NO_FOUND -1    
+
+  int binarySearch(int* arr, int l, int r, int x)
+  {
+      // Điều kiện để thực hiện tìm kiếm là right >= left
+      if (r >= l)
+      {
+          int mid = (r + l) / 2;
+
+          // mid trùng với giá trị tìm kiếm
+          if (arr[mid] == x){
+              return mid;
+          }
+
+          // mid > giá trị tìm kiếm, tìm kiếm nửa trái
+          else if (arr[mid] > x){
+              return binarySearch(arr, l, mid - 1, x);
+          }
+
+          // mid < giá trị tìm kiếm, tìm kiếm nửa phải 
+          else{
+              return binarySearch(arr, mid + 1, r, x);
+          }
+      }
+      // right < left -> Kết thúc tìm kiếm
+      return NO_FOUND;
+  }
+```
 
 </details>
 
