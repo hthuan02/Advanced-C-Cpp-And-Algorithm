@@ -12,12 +12,6 @@ int binarySearch(int *arr, int l, int r, int x)
     // Dùng while nếu không dùng đệ quy
     if (r >= l)
     {
-        /**
-         * Tính trung bình cộng, so sánh:
-         * - Nếu mid = x, trả về giá trị mid
-         * - Nếu mid > x, dùng đệ quy quay lại binarySearch, tìm kiếm bên trái
-         */
-
         int mid = (r + l) / 2;
 
         if (arr[mid] == x)
