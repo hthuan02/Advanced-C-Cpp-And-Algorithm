@@ -5,7 +5,7 @@ int *ptr = NULL;
 void count()
 {
     // Static cục bộ
-    static int a = 5;
+    static int a = 5; // 0x01 0x02 0x03 0x04
     ptr = &a;
     a++;
     printf("Gia tri: %d\n", a);

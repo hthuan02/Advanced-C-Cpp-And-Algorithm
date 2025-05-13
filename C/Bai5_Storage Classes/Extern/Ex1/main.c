@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "File1.c"
+
 
 extern int var_global;
 
@@ -11,4 +11,6 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+// nếu không khai báo include<File1.c>
 // gcc main.c File1.c -o main
+// ./main

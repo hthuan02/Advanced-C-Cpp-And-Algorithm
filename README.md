@@ -1263,11 +1263,9 @@ VD2: Kết hợp con trỏ hằng + hằng con trỏ
 
 ## 1. Extern
 
-> Cho phép những file trong cùng 1 thư mục chia sẻ tài nguyên với nhau (biến, hàm, mảng).
+> Cho phép chia sẻ tài nguyên (biến, hàm) giữa những file khác nhau để sử dụng.
 >
-> Các biến chỉ khai báo, không được khởi tạo.
->
-> Khai báo biến cấp độ cao nhất - toàn cục.
+> Chỉ sử dụng cho biến toàn cục, và chỉ khai báo, không được khởi tạo.
 
 **Ưu điểm quan trọng:** Tiết kiệm được bộ nhớ.
 
@@ -1281,7 +1279,17 @@ _VD1:_ Ta có 3 file
 
           main.c 
 
-➡️ Để sử dụng các biến của 1 và 2, ta khai báo `extern int a;` hoặc `extern int b;`.
+- Để sử dụng các biến của 1 và 2, ta khai báo `extern int a;` hoặc `extern int b;`.
+
+- Thực hiện liên kết file lại xem các biến, các hàm nằm ở đâu để file main sử dụng lại được
+
+```c
+  // gcc main.c File1.c -o main
+  // ./main
+```
+**Lưu ý:** Trong C/C++, những hàm khai báo toàn cục trong cùng 1 file, có thể sử dụng lại không cần khai báo `extern`. Còn biến thì bắt buộc khai báo `extern`.
+
+**Ứng dụng:** Thiết kế thư viện, `extern` được đặt ở file header
 
 ## 2. Static
 
@@ -1311,8 +1319,11 @@ _VD2: Static biến cục bộ_
      }
 ```
 - Hàm `count` dù được gọi bao nhiêu lần vẫn in ra giá trị là 6. Vì biến `a` được khai báo là 1 biến cục bộ trong hàm `count()`
+
 - Sau khi hàm `count` đầu tiền hoàn thành, `a` sẽ bị hủy giá trị (cấp thoát địa chỉ) và các giá trị tiếp theo vẫn = 6. 
-- Nếu ở thêm biến `static` cục bộ vào `int a=5;` là `static int a=5;` thì giá trị `a` mới có thể tăng dần lên 7, 8,... theo số lần gọi hàm `count`.
+
+- Nếu thêm biến `static` cục bộ vào `int a=5;` là `static int a=5;` thì giá trị `a` mới có thể tăng dần lên 7, 8,... theo số lần gọi hàm `count`.
+
 - Có thể dùng con trỏ để thay đổi giá trị 
 ```c
      #include<stdio.h>
@@ -1334,21 +1345,43 @@ _VD2: Static biến cục bộ_
      }
 ```
 
+**Ứng dụng:** Dùng dể lọc nhiễu
+
+VD: Nút nhấn -> (=1) Led 1 sáng, Led 2 chưa sáng
+
+-> Dùng static cục bộ để giữ lại giá trị nút nhấn trước đó (=1), trong 1 khoảng thời gian đọc giá trị (=1) nhiều lần.
+
 ### 2.2 Satic - global variables
 
-> Giới hạn phạm vị sử dụng trong 1 file, không thể liên kết file (các file khác không dùng Extern để gọi ra được). 
+> Giới hạn phạm vị sử dụng trong 1 file nguồn hiện tại, không thể liên kết file (các file khác không dùng Extern để gọi ra được). 
 >
 > Không thể dùng con trỏ để thay đổi giá trị.
 
-**- Ưu điểm:** Sử dụng static toàn cục để ẩn ở quá trình trung gian tính ra kết quả. Như tính delta trong phương trình bậc 2.
+**Ưu điểm:** Sử dụng static toàn cục để ẩn ở quá trình trung gian tính ra kết quả. Như tính delta trong phương trình bậc 2 bị ẩn, chỉ hiển thị đầu vào và kết quả.
+
+```c
+// Nhập hệ số
+void input_coefficients(Equation *eq);
+
+// Tính delta
+static double calculate_delta(double a, double b, double c);
+
+// Giải phương trình
+static void solve(Equation *eq);
+
+// Hiển thị kết quả
+void display_result(Equation eq);
+```
+
+**Ứng dụng:** Thiết kế thư viện
 
 ### 2.3 Satic - class (hướng đối tượng trong C++), học sau
 
 ## 3. Volatile
 
-**Biến volatile là gì?** Khai báo biến mà biến này không sử dụng, tránh bị complier tối ưu hóa xóa cái biến này đi.
+> Ngăn trình biên dịch tối ưu xóa 1 biến đi, khi chương trình thực thi nhiều lần mà biến này vẫn không sử dụng hoặc giá trị không thay đổi
 
-> Dùng trong code cho MCU, ép buộc 1 biến truy cập đến địa chỉ và nó không bị xóa khỏi bộ nhớ khi biến đó k được sử dụng.
+Dùng trong code cho MCU, ép buộc 1 biến truy cập đến địa chỉ và nó không bị xóa khỏi bộ nhớ khi biến đó k được sử dụng.
 
 ```c
      // Dùng trong code VDK
@@ -1358,28 +1391,34 @@ _VD2: Static biến cục bộ_
 
 ```
 
-**Ứng dụng:** Đọc giá trị cảm biến nhiệt độ nhiệt độ, ví dụ có 10 giá trị 30 độ C giống nhau, thì có nguy cơ biến CB nhiệt độ bị xóa khỏi bộ nhớ. Vì vậy, sử dụng biến Volatile đảm bảo cảm biến nhận đúng giá trị không bị cấp thoát, hạn chế sai số.
+**Ứng dụng:** Đọc giá trị cảm biến nhiệt độ nhiệt độ, ví dụ có 10 giá trị 30 độ C giống nhau, thì biến đó không được cập nhật và bị tối ưu xóa khỏi bộ nhớ. 
+
+Vì vậy, sử dụng biến Volatile đảm bảo cảm biến nhận đúng giá trị không bị cấp thoát, hạn chế sai số.
 
 ## 4. Register
 
+> Khi khai báo biến có từ khóa `register`, thì biến đó lưu trực tiếp vào thanh ghi (không tương tác qua RAM) và thực hiện tính toán ở bộ ALU và trả kết quả về thanh ghi.
+
+**Ưu điểm:**
+- Giúp rút ngắn thời gian chạy và tăng hiệu suất làm việc của chương trình _(Vì chỉ thực hiện 2 bước, bỏ qua bước đầu-cuối)_
+     
+- Chỉ sử dụng cho biến cục bộ
+  
+  - Vì biến lưu trên thanh ghi, không lưu ở RAM nên không thể dùng `&` lấy địa chỉ -> Không thể truy cập thao tác được.  
+
+  - Do số lượng thanh ghi có hạn chế, nếu sử dụng biến toàn cục có register thì sẽ tồn tại xuyên suốt chương trình tốn quá nhiều thanh ghi.
+
 ![](https://github.com/hthuan02/Advanced-C-Cpp-and-Algorithm/blob/main/C/Bai5_Storage%20Classes/register.png)
 
-Khi thực thi 1 chương trình sẽ trải qua 4 giai đoạn:
+Khi thực hiện một phép tính qua 4 giai đoạn:
 
-**(1):** Lưu trữ từ trong bộ nhớ RAM, thực hiện tính toán.
+**(1):** Đưa giá trị ban đầu và thông tin phép tính từ RAM  -> Các thanh ghi
 
-**(2):** Thao tác tính toán các giá trị.
+**(2):** Đưa thanh ghi chứa giá trị, thanh ghi chứa phép tính -> Bộ ALU(Arithmetic Logic Unit) để thực hiện tính toán.
 
-**(3):** Tính xong thì lưu giá trị trong thanh ghi.
+**(3):** ALU -> Trả kết quả và lưu trữ tạm thời trong thanh ghi khác.
 
 **(4):** Lấy giá trị trong thanh ghi trả về biến trong RAM, kết quả = 6.
-
-
-**Ứng dụng của biến register:**
-
-- Khai báo biến register, thì chương trình chỉ thực hiện tính toán và lưu giá trị trên thanh ghi( bị lượt bỏ 2 bước đầu-cuối: Lưu trữ trên RAM và trả kqua từ thanh ghi lên RAM). Giúp rút ngắn thời gian chạy và tăng hiệu suất làm việc của chương trình.
-     
-- Chỉ sử dụng cho biến cục bộ.
 
 </details>
 
