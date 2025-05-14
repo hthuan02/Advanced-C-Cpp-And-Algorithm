@@ -1423,123 +1423,114 @@ Khi thực hiện một phép tính qua 4 giai đoạn:
 </details>
 
 <details>
-  <summary><h3>Bài 6: Goto - Setjmp</h3></summary>
-  
-## I. Goto
->Cho phép đoạn code nhảy đến label(nhãn) mà mình chỉ , label có để đặt bất cứ vị trí nào trong cùng 1 hàm.
+  <summary><h3>Bài 6: Goto - setjmp</h3></summary>
 
-- _VD1: Tạo Menu sử dụng lệnh Goto_
+<details>
+  <summary><h2>A. Goto - setjmp</h2></summary>
+  
+## I. Goto  
+
+> Kiểm soát luồng chạy của chương trình dựa vào label (nhãn)
+>
+> Cho phép đoạn code nhảy đến label (nhãn) bát kỳ mà mình chỉ định, label có để đặt bất cứ vị trí nào **trong cùng 1 hàm**.
+>
+
+_VD1:_
    
 ```c
-  #include<stdio.h>
+  #include <stdio.h>
 
-  int main(int argc, char const *argv[])
+  int main()
   {
-    int option;
-    menu1:
-    do{
-      printf("Menu1\n");
-      printf("1: Tao ra menu thu ....\n");
-      printf("2....\n");
-      printf("3....\n");
-      printf("%d....\n",option);
-    } while(option != 1);
+    int i = 0;
 
-  switch (option){
-    case 1:
-      printf("Menu2\n");
-      printf("0: Quay lai Menu 1\n");
-      printf("1: Ket thuc chuong trinh\n");
-      printf("2....\n");
-      scanf("%d",&option);
-      break;
-    
-      switch (option){
-        case 0:
-          /* goto <label> */
-          goto menu1;
-        case 1:
-          goto thoatchuongtrinh;
-        case 2:
-          break;
+    // Đặt nhãn
+    start:
+        if (i >= 5)
+        {
+          goto end;  // Chuyển control đến nhãn "end"
         }
-        break;
 
-        case 2:
-          /* code */
-        break;
+        printf("%d ", i);
+        i++;
 
-      case 3:
-        /* code */
-      break;
+        goto start;  // Chuyển control đến nhãn "start"
 
-      default:
-        break;         
-    }
-    thoatchuongtrinh:
+    // Nhãn "end"
+    end:
+        printf("\n");
     return 0;
   }
 ```
 
-   - Chương trình chạy tuần tự từ Menu1 đến Menu2. Nhưng ở Menu2 có 2 Option:
-      - `case 0:`: Dùng lệnh `goto menu1;` và đặt lệnh `menu1:` ở đầu Menu1, chương trình sẽ trở về Menu1.
-      - `case 1`: Lệnh `goto thoatchuongtrinh;` và đặt lệnh `thoatchuongtrinh:` ở cuối, chỉ định chương trình thoát ra khỏi switch để kết thúc chương trình.
-  
-## Nhược điểm của Goto:
--  Vì chương trình không chạy tuần tự, nên code khó đọc, khó quản lý và bảo trì.
--  Khó debug, vì khó xác định được vị trí gây lỗi.
+Chương trình chạy tuần tự
 
-## Ưu điểm:
+- Đến nhãn `start` thực hiện so sánh trong `if` có `i=0 < 5` không thỏa mãn -> in ra `i=0` và tăng i lên 1. Chạy đến `goto start;` chương trình quay lại nhãn `start:` tiếp tục thực hiện so sánh
 
-### 1. Thoát khỏi nhiều cấp độ vòng lặp
+- Khi `i=5`, thỏa mãn `if` chương trình chạy đến `goto end;` để thực thi nhãn `end:` để kết thúc.
+
+## Ưu điểm: 
+
+- Thoát khỏi nhiều cấp độ vòng lặp
    
->Đối chương trình nhiều cấp độ vòng lặp, mình muốn thoát ra thì phải xét điều kiện và break để thoát chương trình, sẽ phức tạp.
+- Đối chương trình nhiều cấp độ vòng lặp, mình muốn thoát ra thì phải xét điều kiện và break để thoát chương trình, sẽ phức tạp.
 
-_- VD2:_
+_VD2:_
    
 ```c
-   int i,j;
-
-   while(1){
-      for(i=1; i<5; i++ ){
-         for(j=1; j<5; j++ ){
-            if (i == 2 && j == 3){
-               printf("break for j\n");
-               break; //Chi thoat duoc For cua j 
-            }
-         if (i == 2 && j == 3){
-               printf("break for i\n");
-               break; //Thoat duoc For cua i 
-            }
-         }
-      }
-      if (i == 2 && j == 3){
-         printf("break while \n");
-         break; //Thoat duoc For cua while       
-      }
-   } 
+  int i,j;
+  while(1){
+    for(i=1; i < 5; i++ )
+    {
+        for(j=1; j < 5; j++ )
+        {
+          if (i == 2 && j == 3){
+              printf("break for j\n");
+              break; //Chi thoat duoc For cua j 
+          }
+          if (i == 2 && j == 3){
+              printf("break for i\n");
+              break; //Thoat duoc For cua i 
+          }
+        }
+    }
+    if (i == 2 && j == 3){
+        printf("break while \n");
+        break; //Thoat duoc For cua while       
+    }
+  } 
 ```
 - Sử dụng `goto` để thoát chương trình nhanh hơn.
 
 ```c
-   int i,j;
+  int i,j;
 
-   while(1){
-      for(i=1; i<5; i++ ){
-         for(j=1; j<5; j++ ){
-               if (i == 2 && j == 3){
-               printf("Thoat chuong trinh\n");
-               goto thoat; //1 lenh goto, thoat duoc 3 vong lap
-         }
+  while(1){
+    for(i=1; i < 5; i++ )
+    {
+      for(j=1; j < 5; j++ )
+      {
+        if (i == 2 && j == 3){
+          printf("Thoat chuong trinh\n");
+          goto thoat; // 1 lenh goto, thoat duoc 3 vong lap
+        }
       }
-   thoat: 
-   return 0;
-   }
+    } 
+  thoat: 
+  return 0;
+  }
 ```
-### ỨNG DỤNG
- Dùng trong Led ma trận, kết hợp với thuật toán quét led.
+## Nhược điểm của Goto:
+
+- Vị trí đặt là cục bộ trong cùng 1 hàm, nếu muốn di chuyển qua các hàm khác nhau thì không thể được. -> Khắc phục dùng `setjmp` 
+
+- Vì chương trình không chạy tuần tự, nên code khó đọc, khó debug, vì khó xác định được vị trí gây lỗi.
+
+
+**ỨNG DỤNG:** Dùng trong Led ma trận, kết hợp với thuật toán quét led.
 
 ## II. Thư viện <setjmp.h>
+
 > Cho phép chương trình có thể nhảy từ nhãn đặt trong hàm này sang nhãn đặt trong hàm khác thông qua setjmp và longjmp.
 >
 > Thư viện setjmp.h bao gồm 2 hàm setjmp và longjmp.
@@ -1547,23 +1538,310 @@ _- VD2:_
 > Xử lý ngoại lệ 
 
 ### 1. Hàm setjmp
+
+> Lưu lại vị trí `setjmp` đang đứng
+
 ```c
-   int setjmp(jmp_buf);
+  int setjmp(jmp_buf env); // địa chỉ lưu ở biến `env` kiểu `jmp_buf`
 ```
 
 - Khi gọi `setjmp` lần đầu, thì mặc định trả về 0.
 
+- Từ lần gọi thứ 2, trả về giá trị khác 0 (giá trị bao nhiêu phụ thuộc vào `longjmp`)
+
 ### 2. Hàm longjmp
+
+- Khi gọi `longjmp`chương trình sẽ quay lại vị trí mà `setjmp` đang đứng, tiếp tục thực thi từ đó.
+
+- Sau đó, gán giá trị của `int value` vào giá trị mới của `setjmp`
+
 ```c
-   longjmp(jmp_buf, int value);
+  longjmp(jmp_buf env, int value);
 ```
 
-- Khi gọi `longjmp` thì luồng của chương trình sẽ nhảy về `setjmp`. Sau đó, gán giá trị của `int value` vào giá trị mới của `setjmp`
+_VD3:_
 
-_- VD3:_
+- Sử dụng `setjmp` và `longjmp` để nhảy sang các hàm khác nhau, không giới hạn phạm vi 1 hàm cục bộ như `goto`.
 
+```c
+  #include <stdio.h>
+  #include <setjmp.h>
 
-### 3. Xử lý ngoại lệ(TRY, CATCH, THROW) (Chưa hoàn thành)
+  jmp_buf buf; // tham số bên trong hàm kiểu `jmp_buf`, khai báo toàn cục để truyền nhiều hàm 
+
+  int exception = 0;
+
+  void func2()
+  {
+      printf("This is function 2\n");
+      longjmp(buf, 2); // nhảy ngược về func1, gửi giá trị 2 cho func1
+  }
+
+  void func3()
+  {
+      printf("This is function 3\n");
+      longjmp(buf, 3); // nhảy ngược về func1, gửi giá trị 3 cho func1
+  }
+
+  void func1()
+  {
+      exception = setjmp(buf); // lưu vị trí gọi setjmp
+      if (exception == 0)      // Gọi setjmp lần đầu tiên, = 0
+      {
+          printf("This is function 1\n");
+          printf("exception = %d\n", exception);
+          func2();            // ==0 nên gọi func2
+      }
+      else if (exception == 2)
+      {
+          printf("exception = %d\n", exception);
+          func3();            // ==2, gọi hàm func3
+      }
+      else if (exception == 3)
+      {                       // ==3, kết thúc chương trình    
+          printf("exception = %d\n", exception); 
+      }
+  }
+
+  int main(int argc, char const *argv[])
+  {
+      func1();
+      return 0;
+  }
+```
+
+#### Ứng dụng: setjmp và longjmp là để debug chương trình, xử lý ngoại lệ
+
+</details>
+
+<details>
+  <summary><h2>B. Xử lý ngoại lệ (try-catch-throw)</h2></summary>
+
+_(Exception Handling)_
+
+> Xử lý ngoại lệ là thông qua (try-catch-throw) để kiểm tra lỗi. Do C không có sẵn nên phải định nghĩa lại.
+
+- `try`: Định nghĩa một khối lệnh, một đoạn mã để kiểm tra có phát sinh lỗi hay không.
+
+- `catch`: Nếu như có lỗi, thì catch sẽ xử lý lỗi đó ra.
+
+- `throw`: In ra thông báo khi xảy ra lỗi.
+
+_VD: Một số lỗi ngoại lệ, khi thực thi chương trình_ 
+
+```c
+  // Chia một số cho 0 (division by zero).
+  // Truy cập mảng ngoài phạm vi (out of bounds array access).
+  // Truy xuất con trỏ null (null pointer dereference).
+  // Lỗi khi mở hoặc đọc tập tin (file not found).
+  // Lỗi cấp phát bộ nhớ (bad allocation).
+```
+### Cơ chế xử lý ngoại lệ
+
+> Giúp chương trình phản ứng kịp thời mà không làm gián đoạn toàn bộ chương trình.
+
+Cú pháp:
+
+```c
+  try
+  {
+    // Khối lệnh có thể phát sinh lỗi
+  }
+  catch (loại_ngoại_lệ_1)
+  {
+    // Xử lý ngoại lệ loại 1
+  }
+  catch (loại_ngoại_lệ_2)
+  {
+    // Xử lý ngoại lệ loại 2
+  }
+  catch (...)
+  {
+    // Xử lý tất cả các ngoại lệ khác
+  }
+```
+
+<details>
+  <summary><h3>VD0. Sử dụng setjmp & longjmp</h3></summary>
+
+```c
+  #include <stdio.h>
+  #include <setjmp.h>
+
+  jmp_buf buf;
+
+  int exception_code = 0;
+
+  double divide(int a, int b)
+  {
+      if (a == 0 && b == 0) // Nếu a, b truyền vào ==0 hết, value ==1 truyền vào setjmp thứ 2
+      {
+          longjmp(buf, 1);
+      }
+      else if (b == 0)      // Nếu a,b truyền vào có b==0, value ==2 truyền vào setjmp thứ 3
+      {
+          longjmp(buf, 2);
+      }
+
+      return (double)a/b;
+  }
+
+  int main(int argc, char const *argv[])
+  {
+      exception_code = setjmp(buf);    
+
+      if (exception_code == 0)         // Gọi `setjmp` lần đầu tiên, setjmp ==0
+      {
+          printf("Kết quả: %f\n",divide(6,1)); // a,b thỏa mãn, phép tính thực thi
+      }
+      else if (exception_code == 1)    // Lưu vị trí, setjmp ==1 -> Không tồn tại
+      {
+          printf("Không tồn tại!\n");
+      }
+      else if (exception_code == 2)    // Lưu vị trí, setjmp ==2 -> Chia cho 0 
+      {
+          printf("Chia cho 0\n");
+      }
+      return 0;
+  }
+```
+Chương trình phụ thuộc vào giá trị `a` và `b` truyền vào ở hàm `divide` sẽ cho ra biến môi trường `env` , 
+
+- Gọi `setjmp` lần đầu tiên `=0`, `a` và `b` thỏa mãn -> `return` phép tính được thực thi
+
+- Giả sử 2 trường hợp:
+
+  - TH1: `a == 0 && b ==0` thì biến giá trị của `longjmp = 1` và truyền `1` vào `setjmp`, thì `setjmp` có vị trí với `exception_code == 1`
+  -> `printf()`
+
+  - TH2: `b == 0`, thì biến giá trị của `longjmp = 2` và truyền `2` vào `setjmp`, thì `setjmp` có vị trí với `exception_code == 2`
+  -> `printf()`
+</details>
+
+<details>
+  <summary><h3>VD1. Sử dụng try-catch-throw</h3></summary>
+
+```c
+  #include <stdio.h>
+  #include <setjmp.h>
+
+  jmp_buf buf;
+
+  int exception_code = 0;
+
+  #define TRY if((exception_code = setjmp(buf)) == 0)
+  #define CATCH(x) else if(exception_code = x) 
+  #define THROW(x) longjmp(buf, x)
+
+  double divide(int a, int b)
+  {
+      if (a == 0 && b == 0) // Nếu a, b truyền vào ==0 hết, value ==1 truyền vào setjmp thứ 2
+      {
+          THROW(1);
+      }
+      else if (b == 0)      // Nếu a,b truyền vào có b==0, value ==2 truyền vào setjmp thứ 3
+      {
+          THROW(2);
+      }
+
+      return (double)a/b;
+  }
+
+  int main(int argc, char const *argv[])
+  {
+      TRY
+      {
+          printf("Kết quả: %f\n",divide(0,0)); // a,b thỏa mãn, phép tính thực thi
+      }
+
+      CATCH(1)
+      {
+          printf("Không tồn tại!\n");
+      }
+      CATCH(2)
+      {
+          printf("Chia cho 0!\n");
+      }
+
+      return 0;
+  }
+```
+
+Ta có: `if(exception_code == 0)` = `if((exception_code = setjmp(buf)) == 0)` 
+
+TRY: là định nghĩa 1 khối lệnh để kiểm tra có phát sinh lỗi hay không
+ 
+- Tạo macro TRY
+`#define TRY if((exception_code = setjmp(buf)) == 0)`
+ 
+- Tạo macro CATCH, value env của setjmp
+`#define CATCH(x) else if(exception_code = x)`
+
+- Tạo macro THROW, value của longjmp
+`#define THROW(x) longjmp(buf, x)`
+</details>
+
+<details>
+  <summary><h3>VD2. Try-catch-throw hoàn chỉnh</h3></summary>
+
+```c
+  #include <stdio.h>
+  #include <setjmp.h> // thư viện để sử dụng setjmp, longjmp
+
+  jmp_buf buf;        // biến môi trường `buf` kiểu `jmp_buf`
+
+  int exception_code; // biến đọc giá trị khi `setjmp` trả về    
+
+  // Danh sách enum, gồm những lỗi có thể có thay thế 1 2,...
+  typedef enum
+  {
+      NO_ERROR,       // Không có lỗi
+      NO_EXIT,        // Không  tồn tại
+      DIVIDE_BY_0     // Lỗi chia 0
+  } ErrorCodes;  
+
+  #define TRY if ((exception_code = setjmp(buf)) == 0)
+  #define CATCH(x) else if (exception_code == x)
+  #define THROW(x) longjmp(buf, x)
+
+  double divide(int a, int b)
+  {
+      if (a == 0 && b == 0)
+      {
+          THROW(NO_EXIT);
+      }
+      else if (b == 0)
+      {
+          THROW(DIVIDE_BY_0);
+      }
+
+      return (double)a/b;
+  }
+
+  int main(int argc, char const *argv[])
+  {
+      exception_code = NO_ERROR;
+
+      TRY
+      {
+          printf("Ket qua: %0.3f\n", divide(0,0));
+      }
+      CATCH(NO_EXIT)
+      {
+          printf("ERROR! Không tồn tại\n");
+      }
+      CATCH(DIVIDE_BY_0)
+      {
+          printf("ERROR! Chia cho 0\n");
+      }
+
+      // thêm code ở đây
+      printf("Hello world\n");
+      return 0;
+  }
+```
+</details>
+</details>
 </details>
 
 <details>
