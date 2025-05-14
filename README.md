@@ -2334,7 +2334,7 @@ _VD3:_
 ```
 ## 4. Stack segment
 
-> Chứa biến cục bộ (trừ static cục bộ).
+> Chứa biến cục bộ, gồm hằng số cục bộ, tham số truyền vào của hàm (trừ static cục bộ).
 >
 > Có thể đọc và ghi.
 >
@@ -2620,34 +2620,61 @@ _VD4:_
 <details>
   <summary><h3>Bài 9: Stack - Queue</h3></summary> 
 
+## Cấu trúc dữ liệu 
+
+- Là cách tổ chức, và lưu trữ dữ liệu để có thể truy cập sử dụng dữ liệu hiệu quả.
+
+- Cấu trúc dữ liệu được phân làm 2 loại chính:
+  
+  - Cấu trúc dữ liệu tuyến tính (Linear Data Structure): mảng (Array), ngăn xếp (Stack), hàng đợi (Queue), danh sách liên kết (Linked List).
+
+  - Cấu trúc dữ liệu phi tuyến tính (Non-linear Data Structure): đồ thị (Graphs), cây (Trees).
+
+<details>
+  <summary><h2>A. Stack</h2></summary> 
+
 ## I. Stack
 (Last in - First Out) --> Ngăn xếp
 
-- Phần vào sau cùng thì lấy ra tước tiên và ngược lại.
+> Là cấu trúc dữ liệu ngăn xếp tuân theo nguyên tắc(LIFO), phần tử đưa vào cuối thì lấy ra đầu tiên và ngược lại.
 
-- Gồm 3 thao tác:
+- Thao tác trên Stack gồm:
 
-      - push: Thêm phần tử vào ở đỉnh stack(top++)
-  
-      - pop: Xóa 1 phần tử đỉnh stack(top--)
-  
-      - top: giá trị phần tử của đỉnh (Maxtop = size -1)
+  - `push`: Thêm 1 phần tử vào ở đỉnh stack (top++)
 
+  - `pop`: Xóa 1 phần tử ở đỉnh stack (top--) 
+
+  - `peek/top`: Lấy giá trị phần tử ở đỉnh stack
+    
+  - Kiểm tra Stack đầy (Maxtop = size -1)
+
+  - Kiểm tra Stack rỗng (top = -1)
 
 ## II. Queue
 (First in - First out) --> Hàng đợi 
 
-- Phần tử vào đầu thì ra đầu, vào cuối thì ra cuối
+> Là cấu trúc dữ liệu hàng đợi tuân theo nguyên tắc(FIFO), phần tử đưa vào đầu tiên thì lấy ra trước và ngược lại.
 
-- Gổm 3 thao tác:
 
-      - enqueue: Thêm phần tử cuối hàng đợi (rear++)
-  
-      - dequeue: Lấy(loại bỏ) phần tử đầu hàng đợi (front++)
+enqueue: thêm phần tử vào cuối hàng đợi
+dequeue: xóa phần tử từ đầu hàng đợi. 
+front: đọc giá trị của phần tử đứng đầu hàng đợi.
+rear: đọc giá trị của phần tử đứng cuối hàng đợi.
+Kiểm tra hàng đợi đầy/rỗng.
 
-      - front: Lấy giá trị phẩn tử đầu hàng đợi
 
-      - rear: Lấy giá trị phần tủ cuối hàng đợi
+
+- Các thao tác hàng đợi gồm:
+
+  - `enqueue`: Thêm phần tử cuối hàng đợi (rear++)
+
+  - `dequeue`: Xóa phần tử đầu hàng đợi (front++)
+
+  - `front`: Đọc giá trị phẩn tử đầu hàng đợi
+
+  - `rear`: Đọc giá trị phần tử cuối hàng đợi
+
+  - Kiểm tra hàng đợi đầy/rỗng
 
 Ngoài ra, nếu rỗng:
 
@@ -2657,13 +2684,15 @@ Ngoài ra, nếu rỗng:
 
 - dequeue = -1
 
-### 1. Linear Queue (hàng đợi tuyến tính)
+### 1. Linear Queue (Hàng đợi tuyến tính)
 
 > Các phần tử được sắp xếp theo thứ tự tuyến tính, tức là mỗi phần tử đứng sau phần tử khác trong một hàng dọc.
 
-### 2. Circular Queue (hàng đợi vòng tròn)
+### 2. Circular Queue (Hàng đợi vòng tròn)
 
 > Phần tử cuối cùng của hàng đợi được kết nối với phần tử đầu tiên, tạo thành một vòng tròn.
+
+### 2. Priority Queue (Hàng đợi ưu tiên)
 
 </details>
 
