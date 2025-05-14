@@ -1,17 +1,25 @@
 #include <stdio.h>
-#include <stdint.h>
 
-struct Data
+typedef struct
 {
-    int a;
-    double b;
-    char c;
-};
-struct Data data1, data2, data3;
+    char *name;
+    int age;
+    char *addr;
+} User;
 
-// typedef struct Data{
-//     int a;
-//     double b;
-//     char c;
-// } Data;
-// Data *data1, data2, data3;
+User user1, user2, *user3;
+
+int main()
+{   
+    // Truy xuất dữ liệu đối với biến
+    user1.name = "Anh";
+    user1.age = 23;
+    user1.addr = "HCM";
+
+    // Đối với con trỏ
+    user3->name = "Trung";
+    user3->age = 30;
+    user3->addr = "Da Nang";
+
+    return 0;
+}

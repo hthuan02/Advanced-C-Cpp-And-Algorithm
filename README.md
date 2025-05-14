@@ -1847,181 +1847,352 @@ TRY: là định nghĩa 1 khối lệnh để kiểm tra có phát sinh lỗi ha
 <details>
   <summary><h3>Bài 7: Struct & Union</h3></summary>
 
-## 1. Struct
+<details>
+  <summary><h2>A. Struct</h2></summary>
 
-> Struct là 1 dạng kiểu dữ liệu, cho phép người dùng tự định nghĩa. Nhóm các kiểu dữ liệu như: int, char, double,... lại thành kiểu dữ liệu mới. 
+### 1. Khái niệm
+
+> Struct là kiểu dữ liệu do người dùng tự định nghĩa, nhóm các biến có kiểu dữ liệu khác lại với nhau.
 >
-> Kích thước của Struct = Tổng các kích thước dữ liệu + padding 
+> Kích thước của Struct = Tổng kích thích của các biến thành viên + Padding
 
 
 ```c
-    #include <stdio.h>
-    #include <stdint.h> // Thư viện để sử dụng uint32_t, uint8_t, uint16_t
+  #include <stdio.h>
+  #include <stdint.h> // Thư viện để sử dụng uint32_t, uint8_t, uint16_t
 
-    struct Data {
-      int a;
-      double b;
-      char c;
-    };
+  struct Data {
+    int a;
+    double b;
+    char c;
+  };
 
-    struct Data data1, data2, data3;
-
+  struct Data data1, data2, data3;
 ```
 
-hoặc:
+Hoặc:
+
 ```c
-    typedef struct Data{
-      int a;
-      double b;
-      char c;
-    } Data;
+  typedef struct Data{ // để tên `Data` ở đây hoặc không điều được
+    int a;
+    double b;
+    char c;
+  } Data;
 
-    Data *data1, data2, data3;
-
+  Data *data1, data2, data3;
 ```
 
-- Trong hàm `main.c` thì `data.a = 0;`
-- Đối với con trỏ `*ptr` thì `data ->a = 0;`
-
-_VD1:_
+### 2. Truy xuất dữ liệu Struct
 
 ```c
-    #include <stdio.h>
-    #include <stdint.h> // Thư viện để sử dụng uint32_t, uint8_t, uint16_t
+  #include <stdio.h>
 
-    typedef struct {
-      uint32_t var1;
-      uint8_t var2;
-      uint16_t var3;
-    } data; // Tên kiểu dữ liệu là data
+  typedef struct
+  {
+      char *name;
+      int age;
+      char *addr;
+  } User;
 
-    int main(int argc, char const *argv[]) {
-      printf(" Size of data: %d\n");
-      data data;
+  User user1, user2, *user3;
 
-      printf("Address of var1: %p\n", &data.var1);
-      printf("Address of var2: %p\n", &data.var2);
-      printf("Address of var3: %p\n", &data.var3);
+  int main()
+  {   
+      // Truy xuất dữ liệu đối với biến
+      user1.name = "Anh";
+      user1.age = 23;
+      user1.addr = "HCM";
+
+      // Đối với con trỏ
+      user3->name = "Trung";
+      user3->age = 30;
+      user3->addr = "Da Nang";
 
       return 0;
-    }
+  }
 ```
-## Data alignment & padding
 
-- Data alignment: Là việc canh chỉnh, sắp xếp dữ liệu được sắp xếp dữ liệu vào đúng kích thước của CPU (gồm 2 byte, 4 byte, 8 byte,..). Đảm bảo hiệu suất hoạt động của bộ nhớ, dễ dàng truy cập và xử lý nhanh hơn.
 
-- Padding(đệm vào): Khi canh chỉnh, sắp xếp bộ nhớ còn dư ra 1 vài byte trên tổng số ổ đĩa thì đó là padding.
+#### Data alignment & padding
 
+- Data alignment là việc canh chỉnh sắp xếp dữ liệu, sao cho địa chỉ của mỗi biến phù hợp với yêu cầu kiểu dữ liệu
+
+VD:
 ```c
-    //double(8byte): Chia het 8, 0x00 0x08 0x10 0x18,..
-    //int, int32_t, uint32_t(4byte): 0x00 0x04 0x08 0x0C...
-    //float, init16_t, uint16_t(2byte): 0x00 0x02 0x04 0x06...
-    //padding
+  // double, uint64_t (8byte): Đặt tại địa chỉ chi hết cho 8(0x00 0x08 0x10 0x18,..)
+  // int, int32_t, uint32_t (4byte): 0x00 0x04 0x08 0x0C...
+  // float, init16_t, uint16_t (2byte): 0x00 0x02 0x04 0x06...
+  // char, uint8_t (1byte): không có yêu cầu đặt biệt 
+  // padding
 ```
-➡️ Kích thước của Struct = tổng các kiểu dữ liệu + padding
+- Data Padding là ô dữ liệu trống, có địa chỉ không có dữ liệu. Khi canh chỉnh, sắp xếp bộ nhớ còn dư ra 1 vài byte trên tổng số ổ đĩa thì đó là padding.
   
-**_VD2: Tìm kích thước struct VD1_**
+### 3. Kích thước của Struct
+
+> Kích thước của Struct = Tổng kích thích của các biến thành viên + Padding
+>
+> Xét kiểu dữ liệu của biến, lấy kích thước lớn nhất làm chuẩn
+>
+> Biến nào khai báo trước thì cấp phát trước
 
 ```c
-    typedef struct {
-      uint32_t var1; //Chia hết cho 8 (4byte) 
-      uint8_t var2; //1byte
-      uint16_t var3; //2byte
-    } data;
+  printf("Kích thước struct: %d bytes\n",sizeof(<Ten_Struct>));
 ```
-- Giải thích: Ưu tiên kích thước dữ liệu lớn nhất làm chuẩn (4byte).
-    - var1 (4byte)
 
-    - var2 (1byte) + var3 (2byte) = 3 byte (dư 1 byte) -> 1 padding
+<details>
+  <summary><h3>Các ví dụ tính kích thước struct</h3></summary>
 
-    - Tổng = 8
+_VD1:_
+```c
+  typedef struct {
+    uint32_t var1; // 4 byte lớn nhất làm chuẩn 
+    uint8_t var2;  // 1 byte
+    uint16_t var3; // 2 byte
+  } data;
 
-**_VD3: Tìm kích thước_**
+  // 4byte lớn nhất làm chuẩn, xét từ biến được khái báo đầu tiên
+
+  // 4 byte (var1) - ổ đĩa 1
+  // Do var3 là 2 byte, nên bắt đầu từ 0x00, 0x02, 0x04  
+  // 1 byte(var2: 0x00) + 1padding(0x01) + 2 byte( var3) - ổ đĩa 2
+
+  // Tổng: 16 bytes(1 padding)
+```
+
+
+
+_VD2:_
 
 ```c
-      uint8_t var1[9]; //1byte 
-      uint64_t var2[3]; //8byte
-      uint16_t var3[10]; //2byte
-      uint32_t var4[2]; //4byte
+  typedef struct {
+    uint8_t var1[9];    // 1 byte * 9
+    uint64_t var2[3];   // 8 byte * 3
+    uint16_t var3[10];  // 2 byte * 10
+    uint32_t var4[2];   // 4 byte * 2
+  } data;
 
+  // 8 byte làm chuẩn, xét từ biến được khai báo đầu tiên
+  // 8 byte (var1) - ổ đĩa 1
+  // 1 byte lẻ (var1: 0xa0) + 7 padding(0xa1, 0xa2...0xa7) - ổ 2
+  // 8 byte (var2) * 3 - ổ 3 4 5
+  // 8 byte (var3: 4 phần tử) - ổ 6
+  // 8 byte (var3: 4 phần tử) - ổ 7
+
+  // Do var4 là 4byte, nên bắt đầu từ 0x00 0x04,...
+  // 4 byte lẻ (var3: 2 phần tử, 0xe0 0x01...0xe3) + 4byte (var4: 0xe4) - ổ 8
+  // 4 byte lẻ (var4) + 4 padding - ổ 9
+  
+  // Tổng: 72 bytes (11 padding)
 ```
 
-- Giải thích:
-    - Kích thước lớn nhất là 8 byte.
-    
-    - var1: 8byte(làm chuẩn) + (1byte lẻ + 7padding) = 16  
-    
-    - var2: 8byte *3 = 24
-    
-    - var3: 8byte *2 + (4byte lẻ + 4padding) = 24
-    
-    - var4: 8byte
-    
-    - Tổng kích thước = 72 byte
+_VD3:_
+
+```c
+  typedef struct {
+      uint8_t  var1[9];    // 1 byte * 9
+      uint16_t var2[10];   // 2 byte * 10
+      uint32_t var3[2];    // 4 byte * 2
+      uint64_t var4[3];    // 8 byte * 3
+  } User;
+
+  // Chọn kích thước lớn nhất 8byte làm chuẩn, cấp phát vùng nhớ từ trên xuống
+  
+  // 8 byte(var1) - ổ đĩa 1
+
+  // Do var2 là 2byte, nên bắt đầu từ 0x00 0x02 0x04
+  // 1 byte lẻ (var1: 0x00) + 1padding (0x01) + 6byte (var2:3 phần từ, 0x02...0x07) - ổ đĩa 2
+  // 8 byte (var2: 4 phần tử) - ổ 3
+  // 6 byte (var2: 3 phần tử, 0xa0...0xa5) + 2 padding(0xa6 0xa7) - ổ 4
+  // 8 byte (var3) - ổ 5 
+  // 8 byte (var4) * 3 - ổ 6 7 8
+
+  // Tổng: 64 bytes(3padding)
+```
+
+_VD4:_
+
+```c
+  typedef struct
+  {   
+      char *name;      // 8byte
+      int age;         // 4byte + 4padding
+      char *addr;      // 8byte
+  } User;
+
+  // Tổng: 24 bytes (4 padding)
+```
+
+_VD5:_
+
+```c
+  typedef struct
+  {   
+      char name;       // 0x00 + 3 padding
+      int age;         // 0xa4 0xa5 0xa6 0xa7 (4 byte sau của lần 1, tuân sau quy tắc data alignment)
+      char *addr;      // 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf
+  } User;
+
+  // 8 bytes lớn nhất (con trỏ)
+  // Cấp phát vùng nhớ từ trên xuống dưới
+  // cấp phát địa chỉ dựa trên kích thước member lớn nhất
+  // 0xa0 0xa1 0xa2 0xa3 0xa4 0xa5 0xa6 0xa7    (lần 1)
+  // 0xa8 0xa9 0xaa 0xab 0xac 0xad 0xae 0xaf    (lần 2)
+  // tổng: 16 bytes
+  // thực tế: 13 bytes
+  // dư: 3 bytes -> 3 padding
+```
+</details>
+
+### Bit field
+
+> Được sử dụng trong struct, dùng để quy định số bit cụ thể để sử dụng.
+>
+> Không thể sử dụng toán tử lấy địa chỉ (&) trên  các thành viên bit field.
+
+```c
+  struct Example 
+  {
+      int32_t flag  : 1;	// chỉ sử dụng 1 trong 32 bit
+      int64_t count : 4;	// chỉ sử dụng 4 trong 64 bit
+  };
+```
+
+_VD:_
+```c
+  struct Example {
+      unsigned int value : 3; // Lấy 3 bit trong 8 bit (0 đến 7)
+      signed int value : 3;   // Lấy 3 bit trong 8 bit (-4 đến 3)
+  };
+
+  // Mỗi 1 bit thì có 2 trạng thái 0 1
+  // 3 bit  thì có 2^3 trạng thái 
+  // unsigned value =  unsigned int value
+  // giới hạn có thể lưu là giá trị từ 0 dến 7
+  
+  // signed value = signed int value
+```
 
 ### Ứng dụng của Struct: 
     
-- Json
-- Cấu trúc dữ liệu list
-- Giao thức trong MCU, mỗi thông số đều có cấu hình khác nhau -> Dùng Struct để gom các thông số về.
+- Cấu hình (GPIO, UART, SPI,...) mỗi thông số đều có cấu hình khác nhau -> Dùng Struct để gom các thông số về.
 
-## 2. Union
+- JSON, Linked List, Stack, Queue
 
->
-> Giống với struct, đây là kiểu dữ liệu người dùng tự định nghĩa bằng cách nhóm các kiểu dữ liệu lại.
->
-> Union sử dụng chung vùng nhớ, các thành phần đều chung địa chỉ -> Giá trị này thay đổi thì những giá trị khác sẽ thay đổi.
->
-> Kích thước Union = Tổng member có kích thước lớn nhất + padding.
+</details>
 
-**_VD4: Kiểm tra kích thước của Union_**
-```c    
-#include <stdio.h>
-#include <stdint.h>
+<details>
+  <summary><h3>B. Union</h2></summary>
 
-typedef union
-{
-    uint8_t var1; // 1byte
-    uint32_t var2; // 4 byte
-    uint16_t var3; // 2 byte
+### 1. Khái niệm
 
-    // Union sẽ lấy kiểu dữ liệu có kích thước lớn nhất 24 byte
-} frame;
+> Là kiểu dữ liệu người dùng tự định nghĩa bằng cách nhóm các kiểu dữ liệu lại.
 
-int main(int argc, char const *argv[])
-{
+- **Giống với Struct:** Lấy kiểu dữ liệu có kích thước lớn nhất làm chuẩn, quét từ trên xuống.
 
-    printf("Size = %d\n", sizeof(frame)); //Kích thước lớn nhất 4byte
-    frame data;
+- **Khác Struct:** Ở Struct mỗi biến thì có vùng nhớ khác nhau, Union sử dụng chung vùng nhớ cho tất cả biến
 
-    data.var1 = 5;
-    data.var2 = 6;
-    data.var3 = 7;
-    //Vì dữ liệu kiểu Union-> SD chung vùng nhớ
-    //Lấy data sau cùng
-    printf("Var1 = %d\n", data.var1);   //7
-    printf("Var2 = %d\n", data.var2);   //7
-    printf("Var3 = %d\n", data.var3);   //7
-    return 0;
-}
-```
+- Kích thước của union = kích thước của thành viên có kích thước lớn nhất, vì tất cả biến thành viên dùng chung vùng nhớ.
 
-**Trường hợp đặc biệt của VD4:**
+_VD1: Kiểm tra kích thước của Union_
 
 ```c
-    int main(int argc, char const *argv[])
-    {
-    
-        printf("Size = %d\n", sizeof(frame));
-        frame data;
+  typedef union
+  {
+      uint8_t var1;  // 1 byte + 3 padding
+      uint32_t var2; // 4 byte
+      uint16_t var3; // 2 byte + 2 padding
 
-        data.var2 = 4294967294;
+      // Tất cả member dùng chung vùng nhớ: 0x00 0x01 0x02 0x03
+      // Tổng là 4 byte
+  } frame;
+```
+_VD2:_
 
-        printf("Var1 = %d\n", data.var1); //254   
-        printf("Var2 = %u\n", data.var2); //4294967294
-        printf("Var3 = %d\n", data.var3); //65534
-        return 0;
-    }
+```c
+  typedef union{
+    uint8_t var1[3];    // 1 byte * 3     // 3 byte + 1 padding
+    uint32_t var2[6];   // 4 byte * 6     // 4 byte * 6
+    uint16_t var3[9];   // 2 byte * 9     // 4 byte* 4 + 2byte + 2padding
+  } User;
+
+  // Tổng: 24 byte (3 padding)
+```
+
+```c
+  typedef union Ex1
+  {
+
+      uint8_t  a;	    // 1 byte + 15 padding
+      uint16_t b[5];	// 2 byte *5 + 6 padding
+      uint32_t c;	    // 4 byte + 12padding
+      double   d;	    // 8 byte + 8 padding
+  } frame;
+  
+  // Chọn thành viên có kích thước 8 byte lớn nhất làm chuẩn. 
+  // Nhưng mà `uint16_t b[5]` = 2*5 = 10 byte, đây là Union không phải Struct, nó sử dụng chung vùng nhớ
+  // Cần thêm 8 byte padding cho `double d` để chia hết cho 8 và đồng thời đủ cho `uint16_t b` 
+
+```
+
+### 2. Truy xuất dữ liệu của Union
+
+```c    
+  #include <stdio.h>
+  #include <stdint.h>
+
+  typedef union
+  {
+      uint8_t var1;  
+      uint32_t var2; 
+      uint16_t var3; 
+  } frame;
+
+  int main()
+  {
+      printf("Size = %d\n", sizeof(frame)); //Kích thước lớn nhất 4byte
+      frame data;
+
+      data.var1 = 5;
+      data.var2 = 6;
+      data.var3 = 7;
+
+      // Vì dữ liệu kiểu Union-> SD chung vùng nhớ
+      // Lấy data sau cùng
+      
+      printf("Var1 = %d\n", data.var1);   // 7
+      printf("Var2 = %d\n", data.var2);   // 7
+      printf("Var3 = %d\n", data.var3);   // 7
+      return 0;
+  }
+```
+
+_VD3:_
+
+```c    
+  #include <stdio.h>
+  #include <stdint.h>
+
+  typedef union
+  {
+      uint8_t var1;  
+      uint32_t var2; 
+      uint16_t var3; 
+  } frame;
+
+  int main()
+  {
+  
+      printf("Size = %d\n", sizeof(frame));
+      frame data;
+
+      // Truy xuất dữ liệu
+      data.var2 = 4294967294;
+
+      printf("Var1 = %d\n", data.var1); // 254   
+      printf("Var2 = %u\n", data.var2); // 4294967294
+      printf("Var3 = %d\n", data.var3); // 65534
+      return 0;
+  }
 ```
 
 - Giải thích:
@@ -2039,7 +2210,10 @@ int main(int argc, char const *argv[])
     -  var2: 4byte = 4294967294 (4 ô địa chỉ)
 
     -  var3: 2byte = 65534 (0x01+0x02)
+    
+#### 3. Ứng dụng kết hợp Struct - Union
 
+</details>
 </details>
 
 

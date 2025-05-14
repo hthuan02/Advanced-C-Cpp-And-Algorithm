@@ -3,9 +3,9 @@
 
 typedef union
 {
-    uint8_t var1; // 0-255
-    uint32_t var2; //0-4294967295
-    uint16_t var3; // 0-65535
+    uint8_t var1;   // 0 - 255
+    uint32_t var2;  // 0 - 4294967295
+    uint16_t var3;  // 0 - 65535
 
     // Union sẽ lấy kiểu dữ liệu có kích thước lớn nhất 24 byte
 } frame;
@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 
     printf("Size = %d\n", sizeof(frame));
     frame data;
-    data.var1 = 5;
+    data.var1 = 100;
     data.var2 = 6;
     data.var3 = 7;
 

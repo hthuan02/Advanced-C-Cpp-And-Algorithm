@@ -3,9 +3,11 @@
 
 typedef union Ex1
 {
-    uint8_t var1;  // 1 byte + 3padding
-    uint32_t var2; // 4 byte
-    uint16_t var3; // 2 byte + 2padding
+
+    uint8_t  a;	// 1 + 15 padding 
+    uint16_t b[5];	// 10 + 6 padding
+    uint32_t c;	// 4 + 12 padding
+    double   d;	// 8 + 8 padding
 } frame;
 
 int main(int argc, char const *argv[])
