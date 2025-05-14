@@ -2081,7 +2081,7 @@ _VD:_
 </details>
 
 <details>
-  <summary><h3>B. Union</h2></summary>
+  <summary><h2>B. Union</h2></summary>
 
 ### 1. Khái niệm
 
@@ -2210,7 +2210,7 @@ _VD3:_
     -  var2: 4byte = 4294967294 (4 ô địa chỉ)
 
     -  var3: 2byte = 65534 (0x01+0x02)
-    
+
 #### 3. Ứng dụng kết hợp Struct - Union
 
 </details>
